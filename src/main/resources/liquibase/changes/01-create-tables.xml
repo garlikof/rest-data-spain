@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="garlikoff">
+        <createTable tableName="language">
+            <column name="key" type="VARCHAR">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="type_of_accommodation">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR"/>
+        </createTable>
+
+        <createTable tableName="user">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="is_agency" type="BOOLEAN"/>
+            <column name="name" type="VARCHAR"/>
+        </createTable>
+
+        <createTable tableName="word">
+            <column name="key" type="VARCHAR">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="location">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name_key" type="VARCHAR"/>
+            <column name="type" type="VARCHAR"/>
+            <column name="parent_id" type="UUID"/>
+        </createTable>
+
+        <createTable tableName="real_estate_object">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID"/>
+        </createTable>
+
+        <createTable tableName="real_estate_object_param">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID"/>
+            <column name="location" type="UUID"/>
+            <column name="area" type="NUMERIC"/>
+            <column name="number_of_bedrooms" type="INT"/>
+            <column name="number_of_bathrooms" type="INT"/>
+            <column name="type" type="VARCHAR"/>
+            <column name="furnishings" type="VARCHAR"/>
+            <column name="elevator" type="BOOLEAN"/>
+            <column name="balcony" type="BOOLEAN"/>
+            <column name="garage" type="BOOLEAN"/>
+            <column name="courtyard" type="BOOLEAN"/>
+            <column name="pool" type="BOOLEAN"/>
+            <column name="storeroom" type="BOOLEAN"/>
+            <column name="floor" type="INT"/>
+            <column name="air_conditioner" type="BOOLEAN"/>
+        </createTable>
+
+        <createTable tableName="rental_claim">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user" type="UUID"/>
+            <column name="childs" type="BOOLEAN"/>
+            <column name="pets" type="BOOLEAN"/>
+            <column name="price" type="INT4RANGE"/>
+            <column name="location_ids" type="UUID[]"/>
+            <column name="number_of_residents" type="INT"/>
+            <column name="number_of_rooms" type="INT2[]"/>
+            <column name="date_begin" type="DATE"/>
+        </createTable>
+
+        <createTable tableName="rental_claim_location">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="claim" type="UUID"/>
+            <column name="location" type="UUID"/>
+        </createTable>
+
+        <createTable tableName="rental_proposal">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="real_estate_object_id" type="UUID"/>
+            <column name="user" type="UUID"/>
+            <column name="location" type="UUID"/>
+            <column name="price" type="NUMERIC"/>
+            <column name="type" type="VARCHAR"/>
+            <column name="pets" type="BOOLEAN"/>
+            <column name="proposal_created" type="DATE"/>
+            <column name="proposal_status" type="VARCHAR"/>
+        </createTable>
+
+        <createTable tableName="translation">
+            <column name="word_key" type="VARCHAR">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="language_key" type="VARCHAR">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR"/>
+        </createTable>
+
+        <createTable tableName="user_contact">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="userid" type="UUID"/>
+            <column name="type" type="VARCHAR"/>
+            <column name="value" type="VARCHAR"/>
+        </createTable>
+
+        <createTable tableName="user_profile">
+            <column name="user_id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="birthday" type="DATE"/>
+            <column name="language" type="VARCHAR"/>
+            <column name="citizenship" type="VARCHAR"/>
+            <column name="martial_status" type="VARCHAR"/>
+            <column name="name" type="VARCHAR"/>
+        </createTable>
+
+        <createTable tableName="negotiation_of_terms">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="proposal" type="UUID"/>
+            <column name="claim" type="UUID"/>
+            <column name="status" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="garlikoff">
+        <addForeignKeyConstraint baseTableName="location" baseColumnNames="parent_id"
+                                 constraintName="location_location_fk" referencedTableName="location" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="location" baseColumnNames="name_key"
+                                 constraintName="location_word_name_fk" referencedTableName="word" referencedColumnNames="key"/>
+        <addForeignKeyConstraint baseTableName="location" baseColumnNames="type"
+                                 constraintName="location_word_type_fk" referencedTableName="word" referencedColumnNames="key"/>
+
+        <addForeignKeyConstraint baseTableName="real_estate_object" baseColumnNames="user_id"
+                                 constraintName="real_estate_object_user_fk" referencedTableName="user" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="user_id"
+                                 constraintName="real_estate_object_param_user_fk" referencedTableName="user" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="location"
+                                 constraintName="real_estate_object_param_location_fk" referencedTableName="location" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="type"
+                                 constraintName="real_estate_object_param_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+
+        <addForeignKeyConstraint baseTableName="rental_claim" baseColumnNames="user"
+                                 constraintName="rental_claim_user_fk" referencedTableName="user" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="rental_claim_location" baseColumnNames="claim"
+                                 constraintName="claim_location_rental_claim_fk" referencedTableName="rental_claim" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="rental_claim_location" baseColumnNames="location"
+                                 constraintName="claim_location_location_fk" referencedTableName="location" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="rental_proposal" baseColumnNames="real_estate_object_id"
+                                 constraintName="rental_proposal_real_estate_object_fk" referencedTableName="real_estate_object" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="rental_proposal" baseColumnNames="user"
+                                 constraintName="rental_proposal_user_fk" referencedTableName="user" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="rental_proposal" baseColumnNames="location"
+                                 constraintName="rental_proposal_location_fk" referencedTableName="location" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="rental_proposal" baseColumnNames="type"
+                                 constraintName="rental_proposal_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+
+        <addForeignKeyConstraint baseTableName="translation" baseColumnNames="word_key"
+                                 constraintName="translation_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+        <addForeignKeyConstraint baseTableName="translation" baseColumnNames="language_key"
+                                 constraintName="translation_language_fk" referencedTableName="language" referencedColumnNames="key"/>
+
+        <addForeignKeyConstraint baseTableName="user_contact" baseColumnNames="userid"
+                                 constraintName="user_contact_user_fk" referencedTableName="user" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="user_profile" baseColumnNames="user_id"
+                                 constraintName="user_profile_user_fk" referencedTableName="user" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="negotiation_of_terms" baseColumnNames="proposal"
+                                 constraintName="negotiation_of_terms_rental_proposal_fk" referencedTableName="rental_proposal" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="negotiation_of_terms" baseColumnNames="claim"
+                                 constraintName="negotiation_of_terms_rental_claim_fk" referencedTableName="rental_claim" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="3" author="garlikoff">
+        <createIndex indexName="rental_claim_location_idx" tableName="rental_claim">
+            <column name="location_ids" type="UUID[]"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

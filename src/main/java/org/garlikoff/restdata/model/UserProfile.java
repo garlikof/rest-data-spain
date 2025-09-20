@@ -10,6 +10,10 @@ import java.util.UUID;
 @Table(name = "user_profile")
 public class UserProfile {
     @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private UUID id;
+
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
