@@ -5,28 +5,95 @@ import lombok.Data;
 
 import java.util.UUID;
 
+/**
+ * Detailed parameters for a real estate object.
+ */
 @Data
 @Entity
 @Table(name = "real_estate_object_param")
 public class RealEstateObjectParam {
+    /**
+     * Primary identifier for the parameter set.
+     */
     @Id
     @GeneratedValue
-    @Column(name = "id") private UUID id;
+    @Column(name = "id")
+    private UUID id;
+    /**
+     * Owner of the property.
+     */
     @ManyToOne
-    @JoinColumn(name = "user_id") private User user;
+    @JoinColumn(name = "user_id")
+    private User user;
+    /**
+     * Location of the property.
+     */
     @ManyToOne
-    @JoinColumn(name = "location") private Location location;
-    @Column(name = "area") private Double area;
-    @Column(name = "number_of_bedrooms") private Integer numberOfBedrooms;
-    @Column(name = "number_of_bathrooms") private Integer numberOfBathrooms;
-    @Column(name = "type") private String type;
-    @Column(name = "furnishings") private String furnishings;
-    @Column(name = "elevator") private Boolean elevator;
-    @Column(name = "balcony") private Boolean balcony;
-    @Column(name = "garage") private Boolean garage;
-    @Column(name = "courtyard") private Boolean courtyard;
-    @Column(name = "pool") private Boolean pool;
-    @Column(name = "storeroom") private Boolean storeroom;
-    @Column(name = "floor") private Integer floor;
-    @Column(name = "air_conditioner") private Boolean airConditioner;
+    @JoinColumn(name = "location")
+    private Location location;
+    /**
+     * Area of the property.
+     */
+    @Column(name = "area")
+    private Double area;
+    /**
+     * Number of bedrooms.
+     */
+    @Column(name = "number_of_bedrooms")
+    private Integer numberOfBedrooms;
+    /**
+     * Number of bathrooms.
+     */
+    @Column(name = "number_of_bathrooms")
+    private Integer numberOfBathrooms;
+    /**
+     * Type of accommodation.
+     */
+    @Column(name = "type")
+    private String type;
+    /**
+     * Furnishing details.
+     */
+    @Column(name = "furnishings")
+    private String furnishings;
+    /**
+     * Whether an elevator is available.
+     */
+    @Column(name = "elevator")
+    private Boolean elevator;
+    /**
+     * Whether a balcony is available.
+     */
+    @Column(name = "balcony")
+    private Boolean balcony;
+    /**
+     * Whether a garage is available.
+     */
+    @Column(name = "garage")
+    private Boolean garage;
+    /**
+     * Whether a courtyard is available.
+     */
+    @Column(name = "courtyard")
+    private Boolean courtyard;
+    /**
+     * Whether a pool is available.
+     */
+    @Column(name = "pool")
+    private Boolean pool;
+    /**
+     * Whether a storeroom is available.
+     */
+    @Column(name = "storeroom")
+    private Boolean storeroom;
+    /**
+     * Floor number.
+     */
+    @Column(name = "floor")
+    private Integer floor;
+    /**
+     * Indicates availability of an air conditioner.
+     */
+    @Column(name = "air_conditioner")
+    private Boolean airConditioner;
 }

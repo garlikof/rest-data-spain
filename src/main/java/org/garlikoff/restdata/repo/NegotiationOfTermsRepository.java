@@ -6,6 +6,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.UUID;
 
+/**
+ * Repository for {@link NegotiationOfTerms} entities.
+ */
 @RepositoryRestResource(path = "negotiations-of-terms", collectionResourceRel = "negotiationsOfTerms")
 public interface NegotiationOfTermsRepository extends CrudRepository<NegotiationOfTerms, UUID> {
 }

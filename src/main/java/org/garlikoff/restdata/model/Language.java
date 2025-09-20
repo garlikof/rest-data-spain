@@ -6,11 +6,17 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 
+/**
+ * Represents a language in the system.
+ */
 @Data
 @Entity
 @Table(name = "language")
 public class Language {
+    /**
+     * Unique key of the language.
+     */
     @Id
-    String key;
+    private String key;
 
 }
