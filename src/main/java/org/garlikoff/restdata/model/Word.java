@@ -1,16 +1,17 @@
-package org.garlikoff.restdata.dto;
+package org.garlikoff.restdata.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "word")
 public class Word {
     @Id
-    String key;
+    @Column(name = "key") String key;
 }

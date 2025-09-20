@@ -1,4 +1,4 @@
-package org.garlikoff.restdata.dto;
+package org.garlikoff.restdata.model;
 
 import java.io.Serializable;
 
