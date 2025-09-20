@@ -1,7 +1,5 @@
 server:
   port:
-#  servlet:
-#    context-path: /rest-data
 spring:
   application:
     name: rest-data
@@ -9,7 +7,6 @@ spring:
     url:
     username:
     password:
-#    driver-class-name: com.
     hikari:
       idle-timeout: 15000
       max-lifetime: 35000
@@ -21,8 +18,6 @@ spring:
     properties:
       hibernate:
         default_schema:
-
-
   # Для Keycloak пример конфигурации
   security:
     oauth2:
