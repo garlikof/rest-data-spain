@@ -1,0 +1,64 @@
+server:
+  port:
+#  servlet:
+#    context-path: /rest-data
+spring:
+  application:
+    name: rest-data
+  datasource:
+    url:
+    username:
+    password:
+#    driver-class-name: com.
+    hikari:
+      idle-timeout: 15000
+      max-lifetime: 35000
+      validationTimeout: 300000
+      connection-timeout: 300000
+      connectionTestQuery: SELECT 1
+      maximumPoolSize: 5
+  jpa:
+    properties:
+      hibernate:
+        default_schema:
+
+
+  # Для Keycloak пример конфигурации
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri:
+          jwk-set-uri:
+      client:
+        registration:
+          keycloak:
+            client-id:
+            client-secret:
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+            scope: openid,profile,email
+        provider:
+          keycloak:
+            issuer-uri:
+            user-name-attribute: preferred_username
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+      probes:
+        enabled: true
+      livenessState:
+        enabled: true
+      readinessState:
+        enabled: true
+    info:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info'
+logging:
+  level:
+    org.springframework.security: DEBUG
