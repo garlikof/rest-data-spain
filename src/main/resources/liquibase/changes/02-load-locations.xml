@@ -5,13 +5,13 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="populate-words" author="chatgpt">
-        <loadData tableName="word" file="classpath:liquibase/data/word-location.csv" encoding="UTF-8">
+        <loadData tableName="word" file="../data/word-location.csv" encoding="UTF-8" relativeToChangelogFile="true">
             <column name="key" type="STRING"/>
         </loadData>
     </changeSet>
 
     <changeSet id="populate-locations" author="chatgpt">
-        <loadData tableName="location" file="classpath:liquibase/data/locations.csv" encoding="UTF-8">
+        <loadData tableName="location" file="../data/locations.csv" encoding="UTF-8" relativeToChangelogFile="true">
             <column name="id" type="UUID"/>
             <column name="name_key" type="STRING"/>
             <column name="type" type="STRING"/>
