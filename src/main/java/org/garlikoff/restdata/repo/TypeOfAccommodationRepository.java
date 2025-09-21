@@ -6,6 +6,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.UUID;
 
+/**
+ * Репозиторий для сущностей {@link TypeOfAccommodation}.
+ */
 @RepositoryRestResource(path = "types-of-accommodation", collectionResourceRel = "typesOfAccommodation")
 public interface TypeOfAccommodationRepository extends CrudRepository<TypeOfAccommodation, UUID> {
 }
