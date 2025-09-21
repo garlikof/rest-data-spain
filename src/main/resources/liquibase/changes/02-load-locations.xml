@@ -4,9 +4,23 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+    <changeSet id="populate-languages" author="chatgpt">
+        <loadData tableName="language" file="../data/languages.csv" encoding="UTF-8" relativeToChangelogFile="true">
+            <column name="key" type="STRING"/>
+        </loadData>
+    </changeSet>
+
     <changeSet id="populate-words" author="chatgpt">
         <loadData tableName="word" file="../data/word-location.csv" encoding="UTF-8" relativeToChangelogFile="true">
             <column name="key" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="populate-translations" author="chatgpt">
+        <loadData tableName="translation" file="../data/translations.csv" encoding="UTF-8" relativeToChangelogFile="true">
+            <column name="word_key" type="STRING"/>
+            <column name="language_key" type="STRING"/>
+            <column name="value" type="STRING"/>
         </loadData>
     </changeSet>
 
