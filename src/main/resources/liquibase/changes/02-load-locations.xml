@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="populate-words" author="chatgpt">
+        <loadData tableName="word" file="classpath:liquibase/data/word-location.csv" encoding="UTF-8">
+            <column name="key" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="populate-locations" author="chatgpt">
+        <loadData tableName="location" file="classpath:liquibase/data/locations.csv" encoding="UTF-8">
+            <column name="id" type="UUID"/>
+            <column name="name_key" type="STRING"/>
+            <column name="type" type="STRING"/>
+            <column name="parent_id" type="UUID"/>
+            <column name="center" type="STRING"/>
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog>

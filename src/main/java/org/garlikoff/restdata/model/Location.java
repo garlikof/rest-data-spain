@@ -2,6 +2,7 @@ package org.garlikoff.restdata.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.postgresql.geometric.PGpoint;
 
 import java.util.UUID;
 
@@ -16,4 +17,5 @@ public class Location {
     @Column(name = "type") private String type;
     @ManyToOne
     @JoinColumn(name = "parent_id") private Location parent;
+    @Column(name = "center", columnDefinition = "point") private PGpoint center;
 }
