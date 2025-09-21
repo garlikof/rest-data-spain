@@ -6,21 +6,21 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * Represents a real estate object belonging to a user.
+ * Представляет объект недвижимости, принадлежащий пользователю.
  */
 @Data
 @Entity
 @Table(name = "real_estate_object")
 public class RealEstateObject {
     /**
-     * Primary identifier of the real estate object.
+     * Первичный идентификатор объекта недвижимости.
      */
     @Id
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
     /**
-     * Owner of the real estate object.
+     * Владелец объекта недвижимости.
      */
     @ManyToOne
     @JoinColumn(name = "user_id")

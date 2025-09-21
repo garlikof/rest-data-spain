@@ -6,93 +6,93 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * Detailed parameters for a real estate object.
+ * Подробные параметры объекта недвижимости.
  */
 @Data
 @Entity
 @Table(name = "real_estate_object_param")
 public class RealEstateObjectParam {
     /**
-     * Primary identifier for the parameter set.
+     * Первичный идентификатор набора параметров.
      */
     @Id
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
     /**
-     * Owner of the property.
+     * Владелец недвижимости.
      */
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
     /**
-     * Location of the property.
+     * Местоположение недвижимости.
      */
     @ManyToOne
     @JoinColumn(name = "location")
     private Location location;
     /**
-     * Area of the property.
+     * Площадь недвижимости.
      */
     @Column(name = "area")
     private Double area;
     /**
-     * Number of bedrooms.
+     * Количество спален.
      */
     @Column(name = "number_of_bedrooms")
     private Integer numberOfBedrooms;
     /**
-     * Number of bathrooms.
+     * Количество ванных комнат.
      */
     @Column(name = "number_of_bathrooms")
     private Integer numberOfBathrooms;
     /**
-     * Type of accommodation.
+     * Тип жилья.
      */
     @Column(name = "type")
     private String type;
     /**
-     * Furnishing details.
+     * Сведения о меблировке.
      */
     @Column(name = "furnishings")
     private String furnishings;
     /**
-     * Whether an elevator is available.
+     * Наличие лифта.
      */
     @Column(name = "elevator")
     private Boolean elevator;
     /**
-     * Whether a balcony is available.
+     * Наличие балкона.
      */
     @Column(name = "balcony")
     private Boolean balcony;
     /**
-     * Whether a garage is available.
+     * Наличие гаража.
      */
     @Column(name = "garage")
     private Boolean garage;
     /**
-     * Whether a courtyard is available.
+     * Наличие двора.
      */
     @Column(name = "courtyard")
     private Boolean courtyard;
     /**
-     * Whether a pool is available.
+     * Наличие бассейна.
      */
     @Column(name = "pool")
     private Boolean pool;
     /**
-     * Whether a storeroom is available.
+     * Наличие кладовой.
      */
     @Column(name = "storeroom")
     private Boolean storeroom;
     /**
-     * Floor number.
+     * Номер этажа.
      */
     @Column(name = "floor")
     private Integer floor;
     /**
-     * Indicates availability of an air conditioner.
+     * Указывает на наличие кондиционера.
      */
     @Column(name = "air_conditioner")
     private Boolean airConditioner;

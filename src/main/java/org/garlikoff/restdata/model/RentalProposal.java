@@ -6,59 +6,59 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * Represents a rental proposal for a real estate object.
+ * Представляет предложение об аренде объекта недвижимости.
  */
 @Data
 @Entity
 @Table(name = "rental_proposal")
 public class RentalProposal {
     /**
-     * Primary identifier for the proposal.
+     * Первичный идентификатор предложения.
      */
     @Id
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
     /**
-     * Real estate object associated with the proposal.
+     * Объект недвижимости, связанный с предложением.
      */
     @ManyToOne
     @JoinColumn(name = "real_estate_object_id")
     private RealEstateObject realEstateObject;
     /**
-     * The user who created the proposal.
+     * Пользователь, создавший предложение.
      */
     @ManyToOne
     @JoinColumn(name = "user")
     private User user;
     /**
-     * Location related to the proposal.
+     * Местоположение, связанное с предложением.
      */
     @ManyToOne
     @JoinColumn(name = "location")
     private Location location;
     /**
-     * Price of the proposal.
+     * Цена предложения.
      */
     @Column(name = "price")
     private Double price;
     /**
-     * Type of the proposal.
+     * Тип предложения.
      */
     @Column(name = "type")
     private String type;
     /**
-     * Indicates whether pets are allowed.
+     * Указывает, разрешены ли домашние животные.
      */
     @Column(name = "pets")
     private Boolean pets;
     /**
-     * Date when the proposal was created.
+     * Дата создания предложения.
      */
     @Column(name = "proposal_created")
     private java.sql.Date proposalCreated;
     /**
-     * Status of the proposal.
+     * Статус предложения.
      */
     @Column(name = "proposal_status")
     private String proposalStatus;

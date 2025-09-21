@@ -7,7 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.UUID;
 
 /**
- * Repository interface for {@link UserContact} entities.
+ * Репозиторий для сущностей {@link UserContact}.
  */
 @RepositoryRestResource(path = "user-contacts", collectionResourceRel = "userContacts")
 public interface UserContactRepository extends CrudRepository<UserContact, UUID> {

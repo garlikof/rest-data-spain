@@ -7,14 +7,14 @@ import lombok.Data;
 
 
 /**
- * Represents a language in the system.
+ * Представляет язык в системе.
  */
 @Data
 @Entity
 @Table(name = "language")
 public class Language {
     /**
-     * Unique key of the language.
+     * Уникальный ключ языка.
      */
     @Id
     private String key;

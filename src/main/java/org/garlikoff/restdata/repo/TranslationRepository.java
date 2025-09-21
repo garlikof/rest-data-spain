@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
- * Repository for {@link Translation} entities.
+ * Репозиторий для сущностей {@link Translation}.
  */
 @RepositoryRestResource(path = "translations", collectionResourceRel = "translations")
 public interface TranslationRepository extends CrudRepository<Translation, TranslationId> {

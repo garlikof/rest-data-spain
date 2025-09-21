@@ -3,15 +3,15 @@ package org.garlikoff.restdata.model;
 import java.io.Serializable;
 
 /**
- * Composite identifier for {@link Language} and {@link Word} association.
+ * Составной идентификатор связи {@link Language} и {@link Word}.
  */
 public class LanguageId implements Serializable {
     /**
-     * The word key.
+     * Ключ слова.
      */
     private Word wordKey;
     /**
-     * The language key.
+     * Ключ языка.
      */
     private Language languageKey;
 }

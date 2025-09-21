@@ -7,14 +7,14 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 /**
- * Represents a dictionary word.
+ * Представляет словарное слово.
  */
 @Data
 @Entity
 @Table(name = "word")
 public class Word {
     /**
-     * Unique key for the word.
+     * Уникальный ключ слова.
      */
     @Id
     @Column(name = "key")

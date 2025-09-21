@@ -6,14 +6,14 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * Represents a user profile with personal information.
+ * Представляет пользовательский профиль с персональными данными.
  */
 @Data
 @Entity
 @Table(name = "user_profile")
 public class UserProfile {
     /**
-     * Primary identifier of the profile.
+     * Первичный идентификатор профиля.
      */
     @Id
     @GeneratedValue
@@ -21,33 +21,33 @@ public class UserProfile {
     private UUID id;
 
     /**
-     * Associated user for the profile.
+     * Пользователь, связанный с профилем.
      */
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     /**
-     * Birthdate of the user.
+     * Дата рождения пользователя.
      */
     @Column(name = "birthday")
     private java.sql.Date birthday;
     /**
-     * Preferred language of the user.
+     * Предпочитаемый язык пользователя.
      */
     @Column(name = "language")
     private String language;
     /**
-     * Citizenship information.
+     * Информация о гражданстве.
      */
     @Column(name = "citizenship")
     private String citizenship;
     /**
-     * Marital status (note: schema uses "martial_status").
+     * Семейное положение (в схеме используется поле "martial_status").
      */
     @Column(name = "martial_status")
     private String martialStatus;
     /**
-     * Display name of the user.
+     * Отображаемое имя пользователя.
      */
     @Column(name = "name")
     private String name;

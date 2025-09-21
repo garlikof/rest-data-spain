@@ -6,33 +6,33 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * Represents a negotiation of terms between a rental proposal and claim.
+ * Представляет переговоры об условиях между предложением и заявкой на аренду.
  */
 @Data
 @Entity
 @Table(name = "negotiation_of_terms")
 public class NegotiationOfTerms {
     /**
-     * Primary identifier for the negotiation record.
+     * Первичный идентификатор записи о переговорах.
      */
     @Id
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
     /**
-     * Linked rental proposal.
+     * Связанное предложение об аренде.
      */
     @ManyToOne
     @JoinColumn(name = "proposal")
     private RentalProposal proposal;
     /**
-     * Linked rental claim.
+     * Связанная заявка на аренду.
      */
     @ManyToOne
     @JoinColumn(name = "claim")
     private RentalClaim claim;
     /**
-     * Negotiation status.
+     * Статус переговоров.
      */
     @Column(name = "status")
     private String status;

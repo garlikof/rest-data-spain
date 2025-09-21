@@ -6,57 +6,57 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * Represents a rental claim made by a user.
+ * Представляет заявку на аренду, созданную пользователем.
  */
 @Data
 @Entity
 @Table(name = "rental_claim")
 public class RentalClaim {
     /**
-     * Primary identifier of the claim.
+     * Первичный идентификатор заявки.
      */
     @Id
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
     /**
-     * User who created the claim.
+     * Пользователь, создавший заявку.
      */
     @ManyToOne
     @JoinColumn(name = "user")
     private User user;
     /**
-     * Indicates whether children are expected.
+     * Указывает, ожидается ли проживание с детьми.
      */
     @Column(name = "childs")
     private Boolean childs;
     /**
-     * Indicates whether pets are expected.
+     * Указывает, предполагается ли проживание с питомцами.
      */
     @Column(name = "pets")
     private Boolean pets;
     /**
-     * Desired price range (int4range).
+     * Желаемый ценовой диапазон (int4range).
      */
     @Column(name = "price")
     private String price; // int4range
     /**
-     * Requested location identifiers.
+     * Запрашиваемые идентификаторы местоположений.
      */
     @Column(name = "location_ids")
     private UUID[] locationIds;
     /**
-     * Number of residents.
+     * Количество жильцов.
      */
     @Column(name = "number_of_residents")
     private Integer numberOfResidents;
     /**
-     * Number of rooms required.
+     * Требуемое количество комнат.
      */
     @Column(name = "number_of_rooms")
     private Short[] numberOfRooms;
     /**
-     * Desired start date.
+     * Желаемая дата начала аренды.
      */
     @Column(name = "date_begin")
     private java.sql.Date dateBegin;

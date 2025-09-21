@@ -6,13 +6,13 @@ import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 
 /**
- * Configures the OpenAPI/Swagger documentation for the REST Data Spain project.
+ * Настраивает документацию OpenAPI/Swagger для проекта Rest Data Spain.
  */
 public class SwaggerConfig {
     /**
-     * Creates an OpenAPI bean to expose the basic API metadata.
+     * Создаёт бин OpenAPI, публикующий базовые метаданные API.
      *
-     * @return the preconfigured OpenAPI instance for documentation
+     * @return предварительно настроенный экземпляр OpenAPI для документации
      */
     @Bean
     public OpenAPI customOpenAPI() {

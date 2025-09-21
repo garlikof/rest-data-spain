@@ -6,32 +6,32 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * Represents a contact detail for a user.
+ * Представляет контактные данные пользователя.
  */
 @Data
 @Entity
 @Table(name = "user_contact")
 public class UserContact {
     /**
-     * Primary identifier for the contact.
+     * Первичный идентификатор контакта.
      */
     @Id
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
     /**
-     * Associated user.
+     * Связанный пользователь.
      */
     @ManyToOne
     @JoinColumn(name = "userid", referencedColumnName = "id")
     private User user;
     /**
-     * Contact type, e.g., phone or email.
+     * Тип контакта, например телефон или электронная почта.
      */
     @Column(name = "type")
     private String type;
     /**
-     * Contact value.
+     * Значение контакта.
      */
     @Column(name = "value")
     private String value;

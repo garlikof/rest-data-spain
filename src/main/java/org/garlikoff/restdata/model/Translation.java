@@ -4,19 +4,19 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 /**
- * Represents a translation for a word in a given language.
+ * Представляет перевод слова на заданном языке.
  */
 @Data
 @Entity
 @Table(name = "translation")
 public class Translation {
     /**
-     * Composite identifier containing word and language keys.
+     * Составной идентификатор, содержащий ключи слова и языка.
      */
     @EmbeddedId
     private TranslationId id;
     /**
-     * Localized value of the translation.
+     * Локализованное значение перевода.
      */
     @Column(name = "value")
     private String value;

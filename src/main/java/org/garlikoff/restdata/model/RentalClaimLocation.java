@@ -6,27 +6,27 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * Links a rental claim to a location.
+ * Связывает заявку на аренду с местоположением.
  */
 @Data
 @Entity
 @Table(name = "rental_claim_location")
 public class RentalClaimLocation {
     /**
-     * Primary identifier for the relation.
+     * Первичный идентификатор связи.
      */
     @Id
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
     /**
-     * Associated rental claim.
+     * Связанная заявка на аренду.
      */
     @ManyToOne
     @JoinColumn(name = "claim")
     private RentalClaim claim;
     /**
-     * Associated location.
+     * Связанное местоположение.
      */
     @ManyToOne
     @JoinColumn(name = "location")

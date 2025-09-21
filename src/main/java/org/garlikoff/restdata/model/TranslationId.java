@@ -7,18 +7,18 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * Composite primary key for the {@link Translation} entity.
+ * Составной первичный ключ сущности {@link Translation}.
  */
 @Embeddable
 @Data
 public class TranslationId implements Serializable {
     /**
-     * Word key component of the identifier.
+     * Компонент идентификатора с ключом слова.
      */
     @Column(name = "word_key")
     private String wordKey;
     /**
-     * Language key component of the identifier.
+     * Компонент идентификатора с ключом языка.
      */
     @Column(name = "language_key")
     private String languageKey;

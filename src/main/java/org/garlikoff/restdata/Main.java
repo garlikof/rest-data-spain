@@ -4,15 +4,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Entry point for the Rest Data Spain Spring Boot application.
+ * Точка входа в приложение Rest Data Spain на Spring Boot.
  */
 @SpringBootApplication
 public class Main {
 
     /**
-     * Bootstraps the Spring Boot application.
+     * Инициализирует приложение Spring Boot.
      *
-     * @param args the application arguments passed from the command line
+     * @param args аргументы приложения, переданные из командной строки
      */
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);

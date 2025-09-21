@@ -6,31 +6,31 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * Represents a geographical location.
+ * Представляет географическое местоположение.
  */
 @Data
 @Entity
 @Table(name = "location")
 public class Location {
     /**
-     * Primary identifier for the location.
+     * Первичный идентификатор местоположения.
      */
     @Id
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
     /**
-     * Reference key to translation of the location name.
+     * Ключ ссылки на перевод названия местоположения.
      */
     @Column(name = "name_key")
     private String nameKey;
     /**
-     * Type of the location.
+     * Тип местоположения.
      */
     @Column(name = "type")
     private String type;
     /**
-     * Parent location, if any.
+     * Родительское местоположение, если оно существует.
      */
     @ManyToOne
     @JoinColumn(name = "parent_id")

@@ -7,7 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.UUID;
 
 /**
- * Repository for {@link UserProfile} entities.
+ * Репозиторий для сущностей {@link UserProfile}.
  */
 @RepositoryRestResource(path = "user-profiles", collectionResourceRel = "userProfiles")
 public interface UserProfileRepository extends CrudRepository<UserProfile, UUID> {
