@@ -31,6 +31,7 @@
             <column name="type" type="STRING"/>
             <column name="parent_id" type="UUID"/>
             <column name="center" type="STRING"/>
+            <column name="url" type="STRING"/>
         </loadData>
     </changeSet>
 
