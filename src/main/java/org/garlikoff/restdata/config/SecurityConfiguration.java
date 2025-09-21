@@ -3,6 +3,7 @@ package org.garlikoff.restdata.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -12,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * Настраивает Spring Security для приложения Rest Data Spain.
  */
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfiguration {
 
     /**
@@ -27,6 +29,8 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable) // Для REST API обычно отключаем CSRF
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
+                        .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
+                        .requestMatchers("/actuator/**").hasRole("ACTUATOR")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
