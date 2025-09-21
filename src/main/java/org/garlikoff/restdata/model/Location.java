@@ -39,4 +39,10 @@ public class Location {
   
     @Column(name = "center", columnDefinition = "point")
     private PGpoint center;
+
+    /**
+     * Ссылка на местоположение в Google Maps.
+     */
+    @Column(name = "url")
+    private String url;
 }

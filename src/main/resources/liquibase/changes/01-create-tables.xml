@@ -40,6 +40,7 @@
             <column name="type" type="VARCHAR"/>
             <column name="parent_id" type="UUID"/>
             <column name="center" type="POINT"/>
+            <column name="url" type="VARCHAR"/>
         </createTable>
 
         <createTable tableName="real_estate_object">
