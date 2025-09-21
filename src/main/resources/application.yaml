@@ -10,15 +10,14 @@ spring:
     hikari:
       idle-timeout: 15000
       max-lifetime: 35000
-      validationTimeout: 300000
+      validation-timeout: 300000
       connection-timeout: 300000
-      connectionTestQuery: SELECT 1
-      maximumPoolSize: 5
+      connection-test-query: SELECT 1
+      maximum-pool-size: 5
   jpa:
     properties:
       hibernate:
         default_schema:
-  # Для Keycloak пример конфигурации
   security:
     oauth2:
       resourceserver:
@@ -37,23 +36,26 @@ spring:
           keycloak:
             issuer-uri:
             user-name-attribute: preferred_username
+  data:
+    rest:
+      detection-strategy: annotated
 management:
   endpoint:
     health:
       enabled: true
-      show-details: always
+      show-details: when_authorized
       probes:
         enabled: true
-      livenessState:
+      livenessstate:
         enabled: true
-      readinessState:
+      readinessstate:
         enabled: true
     info:
-      enabled: true
+      enabled: false
   endpoints:
     web:
       exposure:
-        include: 'health,info'
+        include: health
 logging:
   level:
-    org.springframework.security: DEBUG
+    org.springframework.security: INFO
