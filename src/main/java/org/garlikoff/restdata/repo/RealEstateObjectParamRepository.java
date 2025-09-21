@@ -6,6 +6,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.UUID;
 
+/**
+ * Репозиторий для сущностей {@link RealEstateObjectParam}.
+ */
 @RepositoryRestResource(path = "real-estate-object-params", collectionResourceRel = "realEstateObjectParams")
 public interface RealEstateObjectParamRepository extends CrudRepository<RealEstateObjectParam, UUID> {
 }

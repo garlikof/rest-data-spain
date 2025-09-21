@@ -8,10 +8,19 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
-
+/**
+ * Настраивает Spring Security для приложения Rest Data Spain.
+ */
 @Configuration
 public class SecurityConfiguration {
 
+    /**
+     * Формирует цепочку фильтров безопасности для бессессионного API на основе OAuth2 JWT.
+     *
+     * @param http объект HTTP-безопасности для настройки
+     * @return настроенная цепочка фильтров безопасности
+     * @throws Exception если произошла ошибка конфигурации
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
