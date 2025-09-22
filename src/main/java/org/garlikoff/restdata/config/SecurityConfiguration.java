@@ -27,6 +27,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable) // Для REST API обычно отключаем CSRF
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
