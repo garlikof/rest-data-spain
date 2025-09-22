@@ -1,10 +1,9 @@
 package org.garlikoff.restdata.model;
 
-import com.vladmihalcea.hibernate.type.basic.PostgreSQLPointType;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.Type;
 import org.postgresql.geometric.PGpoint;
+import org.garlikoff.restdata.model.converter.PGpointAttributeConverter;
 
 import java.util.UUID;
 
@@ -39,7 +38,7 @@ public class Location {
     @JoinColumn(name = "parent_id")
     private Location parent;
   
-    @Type(PostgreSQLPointType.class)
+    @Convert(converter = PGpointAttributeConverter.class)
     @Column(name = "center", columnDefinition = "point")
     private PGpoint center;
 
