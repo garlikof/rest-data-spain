@@ -3,6 +3,7 @@ package org.garlikoff.restdata.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.postgresql.geometric.PGpoint;
+import org.garlikoff.restdata.model.converter.PGpointAttributeConverter;
 
 import java.util.UUID;
 
@@ -37,6 +38,7 @@ public class Location {
     @JoinColumn(name = "parent_id")
     private Location parent;
   
+    @Convert(converter = PGpointAttributeConverter.class)
     @Column(name = "center", columnDefinition = "point")
     private PGpoint center;
 
