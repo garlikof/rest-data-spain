@@ -11,10 +11,8 @@ import io.milvus.param.collection.LoadCollectionParam;
 import io.milvus.param.dml.InsertParam;
 import io.milvus.param.dml.SearchParam;
 import io.milvus.param.index.CreateIndexParam;
-import io.milvus.param.index.IndexType;
 import io.milvus.param.MetricType;
 import io.milvus.grpc.FlushResponse;
-import io.milvus.grpc.RpcStatus;
 import io.milvus.response.SearchResultsWrapper;
 import org.garlikoff.restdata.config.MilvusProperties;
 import org.garlikoff.restdata.model.RealEstateObject;
@@ -196,7 +194,7 @@ public class RealEstateMilvusService {
         io.milvus.param.collection.DropCollectionParam dropCollectionParam = io.milvus.param.collection.DropCollectionParam.newBuilder()
             .withCollectionName(properties.getCollection())
             .build();
-        R<RpcStatus> dropResponse = client.dropCollection(dropCollectionParam);
+        R<?> dropResponse = client.dropCollection(dropCollectionParam);
         check(dropResponse, "drop collection");
     }
 
@@ -243,17 +241,17 @@ public class RealEstateMilvusService {
             .addFieldType(description)
             .addFieldType(vector);
         CreateCollectionParam createCollectionParam = builder.build();
-        R<RpcStatus> createResponse = client.createCollection(createCollectionParam);
+        R<?> createResponse = client.createCollection(createCollectionParam);
         check(createResponse, "create collection");
-        CreateIndexParam indexParam = CreateIndexParam.newBuilder()
+        CreateIndexParam.Builder indexBuilder = CreateIndexParam.newBuilder()
             .withCollectionName(properties.getCollection())
             .withFieldName(properties.getVectorField())
             .withIndexName(properties.getVectorField() + "_idx")
-            .withIndexType(resolveIndexType())
             .withMetricType(resolveMetricType())
-            .withExtraParam(properties.getIndexParams())
-            .build();
-        R<RpcStatus> indexResponse = client.createIndex(indexParam);
+            .withExtraParam(properties.getIndexParams());
+        applyIndexType(indexBuilder);
+        CreateIndexParam indexParam = indexBuilder.build();
+        R<?> indexResponse = client.createIndex(indexParam);
         check(indexResponse, "create index");
     }
 
@@ -287,7 +285,7 @@ public class RealEstateMilvusService {
             .withCollectionName(properties.getCollection())
             .build());
         check(flushResponse, "flush collection");
-        R<RpcStatus> loadResponse = client.loadCollection(LoadCollectionParam.newBuilder()
+        R<?> loadResponse = client.loadCollection(LoadCollectionParam.newBuilder()
             .withCollectionName(properties.getCollection())
             .build());
         check(loadResponse, "load collection");
@@ -365,11 +363,32 @@ public class RealEstateMilvusService {
         return UUID.fromString(text);
     }
 
-    private IndexType resolveIndexType() {
+    private void applyIndexType(CreateIndexParam.Builder builder) {
+        if (builder == null) {
+            return;
+        }
+        if (!setIndexType(builder, properties.getIndexType())) {
+            setIndexType(builder, "IVF_FLAT");
+        }
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private boolean setIndexType(CreateIndexParam.Builder builder, String type) {
+        if (type == null || type.isBlank()) {
+            return false;
+        }
         try {
-            return IndexType.valueOf(properties.getIndexType().toUpperCase(Locale.ROOT));
-        } catch (IllegalArgumentException ex) {
-            return IndexType.IVF_FLAT;
+            Class<?> indexTypeClass = Class.forName("io.milvus.param.index.IndexType");
+            if (!Enum.class.isAssignableFrom(indexTypeClass)) {
+                return false;
+            }
+            Enum value = Enum.valueOf((Class<? extends Enum>) indexTypeClass.asSubclass(Enum.class), type.toUpperCase(Locale.ROOT));
+            builder.getClass().getMethod("withIndexType", indexTypeClass).invoke(builder, value);
+            return true;
+        } catch (IllegalArgumentException ignored) {
+            return false;
+        } catch (ReflectiveOperationException ignored) {
+            return false;
         }
     }
 
