@@ -3,21 +3,19 @@ package org.garlikoff.restdata.service;
 import io.milvus.client.MilvusServiceClient;
 import io.milvus.grpc.DataType;
 import io.milvus.param.R;
-import io.milvus.param.collection.CollectionSchema;
 import io.milvus.param.collection.CreateCollectionParam;
 import io.milvus.param.collection.FieldType;
+import io.milvus.param.collection.FlushParam;
 import io.milvus.param.collection.HasCollectionParam;
 import io.milvus.param.collection.LoadCollectionParam;
-import io.milvus.param.dml.FlushParam;
 import io.milvus.param.dml.InsertParam;
 import io.milvus.param.dml.SearchParam;
 import io.milvus.param.index.CreateIndexParam;
 import io.milvus.param.index.IndexType;
-import io.milvus.param.metric.MetricType;
-import io.milvus.response.SearchResultsWrapper;
-import io.milvus.response.R.Status;
+import io.milvus.param.MetricType;
 import io.milvus.grpc.FlushResponse;
 import io.milvus.grpc.RpcStatus;
+import io.milvus.response.SearchResultsWrapper;
 import org.garlikoff.restdata.config.MilvusProperties;
 import org.garlikoff.restdata.model.RealEstateObject;
 import org.garlikoff.restdata.model.RealEstateObjectParam;
@@ -234,20 +232,17 @@ public class RealEstateMilvusService {
             .withDataType(DataType.FloatVector)
             .withDimension(properties.getDimension())
             .build();
-        CollectionSchema schema = CollectionSchema.newBuilder()
+        CreateCollectionParam.Builder builder = CreateCollectionParam.newBuilder()
+            .withCollectionName(properties.getCollection())
+            .withDescription("Real estate objects embeddings")
+            .withShardsNum(properties.getShardsNum())
             .addFieldType(primary)
             .addFieldType(objectId)
             .addFieldType(paramId)
             .addFieldType(userId)
             .addFieldType(description)
-            .addFieldType(vector)
-            .build();
-        CreateCollectionParam createCollectionParam = CreateCollectionParam.newBuilder()
-            .withCollectionName(properties.getCollection())
-            .withDescription("Real estate objects embeddings")
-            .withShardsNum(properties.getShardsNum())
-            .withSchema(schema)
-            .build();
+            .addFieldType(vector);
+        CreateCollectionParam createCollectionParam = builder.build();
         R<RpcStatus> createResponse = client.createCollection(createCollectionParam);
         check(createResponse, "create collection");
         CreateIndexParam indexParam = CreateIndexParam.newBuilder()
@@ -391,7 +386,7 @@ public class RealEstateMilvusService {
     }
 
     private static <T> void check(R<T> response, String action) {
-        if (response.getStatus() != Status.Success.getCode()) {
+        if (response.getStatus() != R.Status.Success.getCode()) {
             throw new IllegalStateException("Failed to " + action + ": " + response.getMessage());
         }
     }
