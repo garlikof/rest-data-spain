@@ -3,6 +3,8 @@ package org.garlikoff.restdata.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 /**
@@ -25,6 +27,12 @@ public class RealEstateObjectParam {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    /**
+     * Объект недвижимости, с которым связаны параметры.
+     */
+    @ManyToOne
+    @JoinColumn(name = "real_estate_object_id")
+    private RealEstateObject realEstateObject;
     /**
      * Местоположение недвижимости.
      */
@@ -49,13 +57,19 @@ public class RealEstateObjectParam {
     /**
      * Тип жилья.
      */
-    @Column(name = "type")
-    private String type;
+    @ManyToOne
+    @JoinColumn(name = "type_of_accommodation_id")
+    private TypeOfAccommodation typeOfAccommodation;
     /**
      * Сведения о меблировке.
      */
     @Column(name = "furnishings")
     private String furnishings;
+    /**
+     * Описание объекта недвижимости.
+     */
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
     /**
      * Наличие лифта.
      */
@@ -91,6 +105,41 @@ public class RealEstateObjectParam {
      */
     @Column(name = "floor")
     private Integer floor;
+    /**
+     * Общее количество комнат.
+     */
+    @Column(name = "number_of_rooms")
+    private Integer numberOfRooms;
+    /**
+     * Стоимость аренды.
+     */
+    @Column(name = "price")
+    private BigDecimal price;
+    /**
+     * Валюта стоимости аренды.
+     */
+    @Column(name = "currency")
+    private String currency;
+    /**
+     * Размер депозита.
+     */
+    @Column(name = "deposit")
+    private BigDecimal deposit;
+    /**
+     * Дата, с которой доступен объект.
+     */
+    @Column(name = "available_from")
+    private LocalDate availableFrom;
+    /**
+     * Разрешены ли дети.
+     */
+    @Column(name = "children_allowed")
+    private Boolean childrenAllowed;
+    /**
+     * Разрешены ли домашние животные.
+     */
+    @Column(name = "pets_allowed")
+    private Boolean petsAllowed;
     /**
      * Указывает на наличие кондиционера.
      */

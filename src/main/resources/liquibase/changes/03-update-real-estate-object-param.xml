@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="3" author="codex">
+        <dropForeignKeyConstraint constraintName="real_estate_object_param_word_fk"
+                                   baseTableName="real_estate_object_param"/>
+        <dropColumn tableName="real_estate_object_param" columnName="type"/>
+
+        <addColumn tableName="real_estate_object_param">
+            <column name="real_estate_object_id" type="UUID"/>
+            <column name="type_of_accommodation_id" type="UUID"/>
+            <column name="description" type="TEXT"/>
+            <column name="number_of_rooms" type="INT"/>
+            <column name="price" type="NUMERIC"/>
+            <column name="currency" type="VARCHAR(3)"/>
+            <column name="deposit" type="NUMERIC"/>
+            <column name="available_from" type="DATE"/>
+            <column name="children_allowed" type="BOOLEAN"/>
+            <column name="pets_allowed" type="BOOLEAN"/>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="real_estate_object_param"
+                                 baseColumnNames="real_estate_object_id"
+                                 referencedTableName="real_estate_object"
+                                 referencedColumnNames="id"
+                                 constraintName="real_estate_object_param_object_fk"/>
+
+        <addForeignKeyConstraint baseTableName="real_estate_object_param"
+                                 baseColumnNames="type_of_accommodation_id"
+                                 referencedTableName="type_of_accommodation"
+                                 referencedColumnNames="id"
+                                 constraintName="real_estate_object_param_type_fk"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -57,3 +57,8 @@ management:
 logging:
   level:
     org.springframework.security: DEBUG
+milvus:
+  host: localhost
+  port: 19530
+  collection-name: real_estate_objects
+  dimension: 128
