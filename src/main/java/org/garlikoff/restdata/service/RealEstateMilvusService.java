@@ -143,20 +143,20 @@ public class RealEstateMilvusService {
         float[] vector = embeddingService.embed(query, properties.getDimension());
         List<List<Float>> vectors = List.of(toList(vector));
         SearchParam.Builder searchBuilder = SearchParam.newBuilder();
-        searchBuilder = apply(searchBuilder, String.class, properties.getCollection(),
+        searchBuilder = invokeBuilder(searchBuilder, properties.getCollection(),
             "withCollectionName", "withCollection");
-        searchBuilder = apply(searchBuilder, MetricType.class, resolveMetricType(),
+        searchBuilder = invokeBuilder(searchBuilder, resolveMetricType(),
             "withMetricType");
-        searchBuilder = apply(searchBuilder, List.class,
+        searchBuilder = invokeBuilder(searchBuilder,
             List.of(FIELD_OBJECT_ID, FIELD_PARAM_ID, FIELD_USER_ID, FIELD_DESCRIPTION),
             "withOutFields", "withOutputFields");
-        searchBuilder = apply(searchBuilder, int.class, Math.max(1, limit),
+        searchBuilder = invokeBuilder(searchBuilder, Math.max(1, limit),
             "withTopK", "withTopk");
-        searchBuilder = apply(searchBuilder, List.class, vectors,
+        searchBuilder = invokeBuilder(searchBuilder, vectors,
             "withVectors");
-        searchBuilder = apply(searchBuilder, String.class, properties.getVectorField(),
+        searchBuilder = invokeBuilder(searchBuilder, properties.getVectorField(),
             "withVectorFieldName", "withVectorField");
-        searchBuilder = apply(searchBuilder, String.class, properties.getSearchParams(),
+        searchBuilder = invokeBuilder(searchBuilder, properties.getSearchParams(),
             "withParams", "withSearchParams");
         SearchParam searchParam = searchBuilder.build();
         io.milvus.param.R<io.milvus.grpc.SearchResults> response = client.search(searchParam);
@@ -166,9 +166,10 @@ public class RealEstateMilvusService {
     }
 
     private synchronized void ensureCollection() {
-        HasCollectionParam hasCollectionParam = HasCollectionParam.newBuilder()
-            .withCollectionName(properties.getCollection())
-            .build();
+        HasCollectionParam.Builder hasBuilder = HasCollectionParam.newBuilder();
+        hasBuilder = invokeBuilder(hasBuilder, properties.getCollection(),
+            "withCollectionName", "withCollection");
+        HasCollectionParam hasCollectionParam = hasBuilder.build();
         R<Boolean> exists = client.hasCollection(hasCollectionParam);
         check(exists, "check collection existence");
         if (Boolean.TRUE.equals(exists.getData())) {
@@ -178,9 +179,10 @@ public class RealEstateMilvusService {
     }
 
     private synchronized void recreateCollection() {
-        HasCollectionParam hasCollectionParam = HasCollectionParam.newBuilder()
-            .withCollectionName(properties.getCollection())
-            .build();
+        HasCollectionParam.Builder hasBuilder = HasCollectionParam.newBuilder();
+        hasBuilder = invokeBuilder(hasBuilder, properties.getCollection(),
+            "withCollectionName", "withCollection");
+        HasCollectionParam hasCollectionParam = hasBuilder.build();
         R<Boolean> exists = client.hasCollection(hasCollectionParam);
         check(exists, "check collection existence");
         if (Boolean.TRUE.equals(exists.getData())) {
@@ -190,9 +192,10 @@ public class RealEstateMilvusService {
     }
 
     private void dropCollection() {
-        io.milvus.param.collection.DropCollectionParam dropCollectionParam = io.milvus.param.collection.DropCollectionParam.newBuilder()
-            .withCollectionName(properties.getCollection())
-            .build();
+        io.milvus.param.collection.DropCollectionParam.Builder dropBuilder = io.milvus.param.collection.DropCollectionParam.newBuilder();
+        dropBuilder = invokeBuilder(dropBuilder, properties.getCollection(),
+            "withCollectionName", "withCollection");
+        io.milvus.param.collection.DropCollectionParam dropCollectionParam = dropBuilder.build();
         R<?> dropResponse = client.dropCollection(dropCollectionParam);
         check(dropResponse, "drop collection");
     }
@@ -229,9 +232,10 @@ public class RealEstateMilvusService {
             .withDataType(DataType.FloatVector)
             .withDimension(properties.getDimension())
             .build();
-        CreateCollectionParam.Builder builder = CreateCollectionParam.newBuilder()
-            .withCollectionName(properties.getCollection())
-            .withDescription("Real estate objects embeddings")
+        CreateCollectionParam.Builder builder = CreateCollectionParam.newBuilder();
+        builder = invokeBuilder(builder, properties.getCollection(),
+            "withCollectionName", "withCollection");
+        builder.withDescription("Real estate objects embeddings")
             .withShardsNum(properties.getShardsNum())
             .addFieldType(primary)
             .addFieldType(objectId)
@@ -242,9 +246,10 @@ public class RealEstateMilvusService {
         CreateCollectionParam createCollectionParam = builder.build();
         R<?> createResponse = client.createCollection(createCollectionParam);
         check(createResponse, "create collection");
-        CreateIndexParam.Builder indexBuilder = CreateIndexParam.newBuilder()
-            .withCollectionName(properties.getCollection())
-            .withFieldName(properties.getVectorField())
+        CreateIndexParam.Builder indexBuilder = CreateIndexParam.newBuilder();
+        indexBuilder = invokeBuilder(indexBuilder, properties.getCollection(),
+            "withCollectionName", "withCollection");
+        indexBuilder.withFieldName(properties.getVectorField())
             .withIndexName(properties.getVectorField() + "_idx")
             .withMetricType(resolveMetricType())
             .withExtraParam(properties.getIndexParams());
@@ -274,19 +279,22 @@ public class RealEstateMilvusService {
             new InsertParam.Field(FIELD_DESCRIPTION, descriptions),
             new InsertParam.Field(properties.getVectorField(), vectors)
         );
-        InsertParam insertParam = InsertParam.newBuilder()
-            .withCollectionName(properties.getCollection())
-            .withFields(fields)
-            .build();
+        InsertParam.Builder insertBuilder = InsertParam.newBuilder();
+        insertBuilder = invokeBuilder(insertBuilder, properties.getCollection(),
+            "withCollectionName", "withCollection");
+        insertBuilder = invokeBuilder(insertBuilder, fields, "withFields");
+        InsertParam insertParam = insertBuilder.build();
         R<io.milvus.grpc.MutationResult> insertResponse = client.insert(insertParam);
         check(insertResponse, "insert records");
-        R<FlushResponse> flushResponse = client.flush(FlushParam.newBuilder()
-            .withCollectionName(properties.getCollection())
-            .build());
+        FlushParam.Builder flushBuilder = FlushParam.newBuilder();
+        flushBuilder = invokeBuilder(flushBuilder, properties.getCollection(),
+            "withCollectionName", "withCollection");
+        R<FlushResponse> flushResponse = client.flush(flushBuilder.build());
         check(flushResponse, "flush collection");
-        R<?> loadResponse = client.loadCollection(LoadCollectionParam.newBuilder()
-            .withCollectionName(properties.getCollection())
-            .build());
+        LoadCollectionParam.Builder loadBuilder = LoadCollectionParam.newBuilder();
+        loadBuilder = invokeBuilder(loadBuilder, properties.getCollection(),
+            "withCollectionName", "withCollection");
+        R<?> loadResponse = client.loadCollection(loadBuilder.build());
         check(loadResponse, "load collection");
     }
 
@@ -504,23 +512,106 @@ public class RealEstateMilvusService {
         return Collections.emptyList();
     }
 
-    private static SearchParam.Builder apply(SearchParam.Builder builder, Class<?> parameterType, Object value,
-                                             String... methodNames) {
+    @SuppressWarnings("unchecked")
+    private static <B> B invokeBuilder(B builder, Object value, String... methodNames) {
+        if (builder == null) {
+            throw new IllegalArgumentException("builder must not be null");
+        }
+        Class<?> builderClass = builder.getClass();
         for (String methodName : methodNames) {
+            Method method = findBuilderMethod(builderClass, methodName, value);
+            if (method == null) {
+                continue;
+            }
             try {
-                Method method = builder.getClass().getMethod(methodName, parameterType);
-                Object result = method.invoke(builder, value);
-                if (result instanceof SearchParam.Builder resultBuilder) {
-                    return resultBuilder;
+                Object argument = coerceValue(method.getParameterTypes()[0], value);
+                Object result = method.invoke(builder, argument);
+                if (result != null && builderClass.isInstance(result)) {
+                    return (B) result;
                 }
                 return builder;
-            } catch (NoSuchMethodException ignored) {
-                // пробуем следующий кандидат
             } catch (ReflectiveOperationException ex) {
                 throw new IllegalStateException("Failed to invoke Milvus builder method '" + methodName + "'", ex);
             }
         }
         throw new IllegalStateException("Milvus SDK builder does not support methods " + Arrays.toString(methodNames));
+    }
+
+    private static Method findBuilderMethod(Class<?> builderClass, String methodName, Object value) {
+        for (Method method : builderClass.getMethods()) {
+            if (!method.getName().equals(methodName) || method.getParameterCount() != 1) {
+                continue;
+            }
+            Class<?> parameterType = method.getParameterTypes()[0];
+            if (isParameterCompatible(parameterType, value)) {
+                return method;
+            }
+        }
+        return null;
+    }
+
+    private static boolean isParameterCompatible(Class<?> parameterType, Object value) {
+        if (value == null) {
+            return !parameterType.isPrimitive();
+        }
+        Class<?> targetType = parameterType.isPrimitive() ? primitiveToWrapper(parameterType) : parameterType;
+        Class<?> valueType = value.getClass();
+        if (Number.class.isAssignableFrom(targetType) && Number.class.isAssignableFrom(valueType)) {
+            return true;
+        }
+        return targetType.isAssignableFrom(valueType);
+    }
+
+    private static Class<?> primitiveToWrapper(Class<?> type) {
+        if (type == boolean.class) {
+            return Boolean.class;
+        } else if (type == byte.class) {
+            return Byte.class;
+        } else if (type == char.class) {
+            return Character.class;
+        } else if (type == short.class) {
+            return Short.class;
+        } else if (type == int.class) {
+            return Integer.class;
+        } else if (type == long.class) {
+            return Long.class;
+        } else if (type == float.class) {
+            return Float.class;
+        } else if (type == double.class) {
+            return Double.class;
+        }
+        return type;
+    }
+
+    private static Object coerceValue(Class<?> parameterType, Object value) {
+        if (value == null) {
+            return null;
+        }
+        Class<?> targetType = parameterType.isPrimitive() ? primitiveToWrapper(parameterType) : parameterType;
+        if (targetType.isInstance(value)) {
+            return value;
+        }
+        if (Number.class.isAssignableFrom(targetType) && value instanceof Number number) {
+            if (targetType == Byte.class) {
+                return number.byteValue();
+            }
+            if (targetType == Short.class) {
+                return number.shortValue();
+            }
+            if (targetType == Integer.class) {
+                return number.intValue();
+            }
+            if (targetType == Long.class) {
+                return number.longValue();
+            }
+            if (targetType == Float.class) {
+                return number.floatValue();
+            }
+            if (targetType == Double.class) {
+                return number.doubleValue();
+            }
+        }
+        return value;
     }
 
     private void applyIndexType(CreateIndexParam.Builder builder) {
