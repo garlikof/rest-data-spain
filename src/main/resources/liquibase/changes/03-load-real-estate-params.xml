@@ -5,7 +5,7 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="3" author="garlikoff">
-        <comment>Заполнение таблицы real_estate_object_param тестовыми данными и словарями.</comment>
+        <comment>Заполнение справочников, пользователей и тестовых данных по объектам недвижимости.</comment>
         <sql>
             INSERT INTO word (key) VALUES
                 ('HOUSING_TYPE_APARTMENT'),
@@ -191,6 +191,36 @@
             ON CONFLICT (word_key, language_key) DO NOTHING;
         </sql>
         <sql>
+            INSERT INTO "user" (is_agency, name)
+            SELECT (gs.i % 4 = 0), 'Usuario ' || gs.i
+            FROM generate_series(1, 20) AS gs(i);
+        </sql>
+        <sql>
+            WITH ordered_users AS (
+                SELECT id,
+                       ROW_NUMBER() OVER (ORDER BY name) AS rn
+                FROM "user"
+                WHERE name LIKE 'Usuario %'
+            )
+            INSERT INTO real_estate_object (user_id)
+            SELECT u.id
+            FROM generate_series(1, 1000) AS s(i)
+            JOIN ordered_users u ON u.rn = ((s.i - 1) % 20) + 1;
+        </sql>
+        <sql>
+            WITH numbered_objects AS (
+                SELECT id AS real_estate_object_id,
+                       user_id,
+                       ROW_NUMBER() OVER (ORDER BY id) AS rn
+                FROM real_estate_object
+                WHERE user_id IN (SELECT id FROM "user" WHERE name LIKE 'Usuario %')
+            ),
+            series AS (
+                SELECT s.i,
+                       no.user_id
+                FROM generate_series(1, 1000) AS s(i)
+                JOIN numbered_objects no ON no.rn = s.i
+            )
             INSERT INTO real_estate_object_param (
                 user_id,
                 location,
@@ -214,31 +244,69 @@
                 orientation
             )
             SELECT
+                series.user_id,
                 NULL,
-                NULL,
-                ROUND(45 + (s.i % 120) + ((s.i % 100) / 100.0), 2),
-                (s.i % 6) + 1,
-                CASE (s.i % 3)
+                ROUND(45 + (series.i % 120) + ((series.i % 100) / 100.0), 2),
+                (series.i % 6) + 1,
+                CASE (series.i % 3)
                     WHEN 0 THEN 1
                     WHEN 1 THEN 2
                     ELSE 3
                 END,
-                (ARRAY['HOUSING_TYPE_APARTMENT','HOUSING_TYPE_HOUSE','HOUSING_TYPE_ROOM'])[(s.i % 3) + 1],
-                (ARRAY['FURNISHING_FULL','FURNISHING_PARTIAL','FURNISHING_NONE'])[(s.i % 3) + 1],
-                (s.i % 2 = 0),
-                (ARRAY['BALCONY_BALCONY','BALCONY_TERRACE','BALCONY_NONE'])[(s.i % 3) + 1],
-                (ARRAY['PARKING_GARAGE','PARKING_PARKING','PARKING_NONE'])[(s.i % 3) + 1],
-                (ARRAY['GARDEN_GARDEN','GARDEN_YARD','GARDEN_NONE'])[(s.i % 3) + 1],
-                (s.i % 5 = 0),
-                (s.i % 4 = 0),
-                (ARRAY['CONDITION_NEW','CONDITION_RENOVATED','CONDITION_GOOD','CONDITION_NEEDS_RENOVATION'])[(s.i % 4) + 1],
-                (ARRAY['FLOOR_SOTANO','FLOOR_SEMISOTANO','FLOOR_PLANTA_BAJA','FLOOR_ENTREPLANTA','FLOOR_PRINCIPAL','FLOOR_PRIMERO','FLOOR_SEGUNDO','FLOOR_TERCERO','FLOOR_ATICO','FLOOR_SOBREATICO','FLOOR_BUHARDILLA'])[(s.i % 11) + 1],
-                (s.i % 2 = 0),
-                (ARRAY['HEATING_GAS','HEATING_ELECTRIC','HEATING_NONE'])[(s.i % 3) + 1],
-                (ARRAY['ENERGY_CLASS_A','ENERGY_CLASS_B','ENERGY_CLASS_C','ENERGY_CLASS_D','ENERGY_CLASS_E','ENERGY_CLASS_F','ENERGY_CLASS_G'])[(s.i % 7) + 1],
-                1950 + (s.i % 70),
-                (ARRAY['ORIENTATION_NORTH','ORIENTATION_SOUTH','ORIENTATION_WEST','ORIENTATION_EAST'])[(s.i % 4) + 1]
-            FROM generate_series(1, 1000) AS s(i);
+                (ARRAY['HOUSING_TYPE_APARTMENT','HOUSING_TYPE_HOUSE','HOUSING_TYPE_ROOM'])[(series.i % 3) + 1],
+                (ARRAY['FURNISHING_FULL','FURNISHING_PARTIAL','FURNISHING_NONE'])[(series.i % 3) + 1],
+                (series.i % 2 = 0),
+                (ARRAY['BALCONY_BALCONY','BALCONY_TERRACE','BALCONY_NONE'])[(series.i % 3) + 1],
+                (ARRAY['PARKING_GARAGE','PARKING_PARKING','PARKING_NONE'])[(series.i % 3) + 1],
+                (ARRAY['GARDEN_GARDEN','GARDEN_YARD','GARDEN_NONE'])[(series.i % 3) + 1],
+                (series.i % 5 = 0),
+                (series.i % 4 = 0),
+                (ARRAY['CONDITION_NEW','CONDITION_RENOVATED','CONDITION_GOOD','CONDITION_NEEDS_RENOVATION'])[(series.i % 4) + 1],
+                (ARRAY['FLOOR_SOTANO','FLOOR_SEMISOTANO','FLOOR_PLANTA_BAJA','FLOOR_ENTREPLANTA','FLOOR_PRINCIPAL','FLOOR_PRIMERO','FLOOR_SEGUNDO','FLOOR_TERCERO','FLOOR_ATICO','FLOOR_SOBREATICO','FLOOR_BUHARDILLA'])[(series.i % 11) + 1],
+                (series.i % 2 = 0),
+                (ARRAY['HEATING_GAS','HEATING_ELECTRIC','HEATING_NONE'])[(series.i % 3) + 1],
+                (ARRAY['ENERGY_CLASS_A','ENERGY_CLASS_B','ENERGY_CLASS_C','ENERGY_CLASS_D','ENERGY_CLASS_E','ENERGY_CLASS_F','ENERGY_CLASS_G'])[(series.i % 7) + 1],
+                1950 + (series.i % 70),
+                (ARRAY['ORIENTATION_NORTH','ORIENTATION_SOUTH','ORIENTATION_WEST','ORIENTATION_EAST'])[(series.i % 4) + 1]
+            FROM series;
+        </sql>
+        <sql>
+            WITH numbered_objects AS (
+                SELECT id AS real_estate_object_id,
+                       user_id,
+                       ROW_NUMBER() OVER (ORDER BY id) AS rn
+                FROM real_estate_object
+                WHERE user_id IN (SELECT id FROM "user" WHERE name LIKE 'Usuario %')
+            ),
+            numbered_params AS (
+                SELECT id AS param_id,
+                       user_id,
+                       type,
+                       ROW_NUMBER() OVER (ORDER BY id) AS rn
+                FROM real_estate_object_param
+                WHERE user_id IN (SELECT id FROM "user" WHERE name LIKE 'Usuario %')
+            )
+            INSERT INTO rental_proposal (
+                real_estate_object_id,
+                "user",
+                location,
+                price,
+                type,
+                pets,
+                proposal_created,
+                proposal_status
+            )
+            SELECT
+                no.real_estate_object_id,
+                no.user_id,
+                NULL,
+                ROUND(500 + ((np.rn * 37) % 2500), 2),
+                np.type,
+                (np.rn % 2 = 0),
+                CURRENT_DATE - ((np.rn - 1) % 30),
+                (ARRAY['ACTIVE','PENDING','CLOSED'])[(np.rn % 3) + 1]
+            FROM numbered_objects no
+            JOIN numbered_params np ON np.rn = no.rn;
         </sql>
     </changeSet>
 
