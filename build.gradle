@@ -9,10 +9,14 @@ plugins {
 group = 'org.garlikoff'
 version = '0.3.1'
 
+//java {
+//	toolchain {
+//		languageVersion = JavaLanguageVersion.of(17)
+//	}
+//}
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -36,6 +40,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-data-rest'
         implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.7'
+        implementation 'io.milvus:milvus-sdk-java:2.4.5'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 
