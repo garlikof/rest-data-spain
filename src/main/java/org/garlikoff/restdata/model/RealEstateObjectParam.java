@@ -47,7 +47,7 @@ public class RealEstateObjectParam {
     @Column(name = "number_of_bathrooms")
     private Integer numberOfBathrooms;
     /**
-     * Тип жилья.
+     * Тип жилья (квартиры, дома, комнаты).
      */
     @Column(name = "type")
     private String type;
@@ -62,20 +62,20 @@ public class RealEstateObjectParam {
     @Column(name = "elevator")
     private Boolean elevator;
     /**
-     * Наличие балкона.
+     * Тип балкона/террасы (балкон, терраса или отсутствие).
      */
-    @Column(name = "balcony")
-    private Boolean balcony;
+    @Column(name = "balcony_terrace")
+    private String balconyTerrace;
     /**
-     * Наличие гаража.
+     * Наличие и тип парковки (гараж, парковка или отсутствие).
      */
-    @Column(name = "garage")
-    private Boolean garage;
+    @Column(name = "garage_parking")
+    private String garageParking;
     /**
-     * Наличие двора.
+     * Тип придомовой территории (сад, двор или отсутствие).
      */
-    @Column(name = "courtyard")
-    private Boolean courtyard;
+    @Column(name = "garden_yard")
+    private String gardenYard;
     /**
      * Наличие бассейна.
      */
@@ -87,13 +87,38 @@ public class RealEstateObjectParam {
     @Column(name = "storeroom")
     private Boolean storeroom;
     /**
-     * Номер этажа.
+     * Состояние жилья.
+     */
+    @Column(name = "housing_condition")
+    private String housingCondition;
+    /**
+     * Номер этажа с учётом классификации (например, Planta baja, Ático).
      */
     @Column(name = "floor")
-    private Integer floor;
+    private String floor;
     /**
      * Указывает на наличие кондиционера.
      */
     @Column(name = "air_conditioner")
     private Boolean airConditioner;
+    /**
+     * Тип отопления (газовое, электрическое или отсутствие).
+     */
+    @Column(name = "heating")
+    private String heating;
+    /**
+     * Энергетический сертификат.
+     */
+    @Column(name = "energy_certificate")
+    private String energyCertificate;
+    /**
+     * Год постройки дома.
+     */
+    @Column(name = "year_built")
+    private Integer yearBuilt;
+    /**
+     * Ориентация квартиры (север, юг, запад, восток).
+     */
+    @Column(name = "orientation")
+    private String orientation;
 }

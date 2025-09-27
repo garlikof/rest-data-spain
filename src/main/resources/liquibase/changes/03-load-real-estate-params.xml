@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="3" author="garlikoff">
+        <comment>Заполнение таблицы real_estate_object_param тестовыми данными.</comment>
+        <sql>
+            INSERT INTO real_estate_object_param (
+                user_id,
+                location,
+                area,
+                number_of_bedrooms,
+                number_of_bathrooms,
+                type,
+                furnishings,
+                elevator,
+                balcony_terrace,
+                garage_parking,
+                garden_yard,
+                pool,
+                storeroom,
+                housing_condition,
+                floor,
+                air_conditioner,
+                heating,
+                energy_certificate,
+                year_built,
+                orientation
+            )
+            SELECT
+                NULL,
+                NULL,
+                ROUND(45 + (s.i % 120) + ((s.i % 100) / 100.0), 2),
+                (s.i % 6) + 1,
+                CASE (s.i % 3)
+                    WHEN 0 THEN 1
+                    WHEN 1 THEN 2
+                    ELSE 3
+                END,
+                CASE (s.i % 3)
+                    WHEN 0 THEN 'Квартиры'
+                    WHEN 1 THEN 'Дома'
+                    ELSE 'Комнаты'
+                END,
+                CASE (s.i % 3)
+                    WHEN 0 THEN 'Меблировано'
+                    WHEN 1 THEN 'Частично меблировано'
+                    ELSE 'Без мебели'
+                END,
+                (s.i % 2 = 0),
+                CASE (s.i % 3)
+                    WHEN 0 THEN 'Балкон'
+                    WHEN 1 THEN 'Терраса'
+                    ELSE 'Нет'
+                END,
+                CASE (s.i % 3)
+                    WHEN 0 THEN 'Гараж'
+                    WHEN 1 THEN 'Парковка'
+                    ELSE 'Нет'
+                END,
+                CASE (s.i % 3)
+                    WHEN 0 THEN 'Сад'
+                    WHEN 1 THEN 'Двор'
+                    ELSE 'Нет'
+                END,
+                (s.i % 5 = 0),
+                (s.i % 4 = 0),
+                CASE (s.i % 4)
+                    WHEN 0 THEN 'Новое'
+                    WHEN 1 THEN 'Отремонтированное'
+                    WHEN 2 THEN 'Хорошее'
+                    ELSE 'Требует ремонта'
+                END,
+                (ARRAY['Sótano','Semisótano','Planta baja','Entreplanta','Principal','1º','2º','3º','Ático','Sobreático','Buhardilla'])[(s.i % 11) + 1],
+                (s.i % 2 = 0),
+                CASE (s.i % 3)
+                    WHEN 0 THEN 'Газовое'
+                    WHEN 1 THEN 'Электрическое'
+                    ELSE 'Нет'
+                END,
+                (ARRAY['A','B','C','D','E','F','G'])[(s.i % 7) + 1],
+                1950 + (s.i % 70),
+                CASE (s.i % 4)
+                    WHEN 0 THEN 'Север'
+                    WHEN 1 THEN 'Юг'
+                    WHEN 2 THEN 'Запад'
+                    ELSE 'Восток'
+                END
+            FROM generate_series(1, 1000) AS s(i);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

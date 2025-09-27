@@ -62,13 +62,18 @@
             <column name="type" type="VARCHAR"/>
             <column name="furnishings" type="VARCHAR"/>
             <column name="elevator" type="BOOLEAN"/>
-            <column name="balcony" type="BOOLEAN"/>
-            <column name="garage" type="BOOLEAN"/>
-            <column name="courtyard" type="BOOLEAN"/>
+            <column name="balcony_terrace" type="VARCHAR"/>
+            <column name="garage_parking" type="VARCHAR"/>
+            <column name="garden_yard" type="VARCHAR"/>
             <column name="pool" type="BOOLEAN"/>
             <column name="storeroom" type="BOOLEAN"/>
-            <column name="floor" type="INT"/>
+            <column name="housing_condition" type="VARCHAR"/>
+            <column name="floor" type="VARCHAR"/>
             <column name="air_conditioner" type="BOOLEAN"/>
+            <column name="heating" type="VARCHAR"/>
+            <column name="energy_certificate" type="VARCHAR"/>
+            <column name="year_built" type="INT"/>
+            <column name="orientation" type="VARCHAR"/>
         </createTable>
 
         <createTable tableName="rental_claim">
@@ -162,9 +167,6 @@
                                  constraintName="real_estate_object_param_user_fk" referencedTableName="user" referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="location"
                                  constraintName="real_estate_object_param_location_fk" referencedTableName="location" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="type"
-                                 constraintName="real_estate_object_param_word_fk" referencedTableName="word" referencedColumnNames="key"/>
-
         <addForeignKeyConstraint baseTableName="rental_claim" baseColumnNames="user"
                                  constraintName="rental_claim_user_fk" referencedTableName="user" referencedColumnNames="id"/>
 
