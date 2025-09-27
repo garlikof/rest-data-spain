@@ -167,6 +167,26 @@
                                  constraintName="real_estate_object_param_user_fk" referencedTableName="user" referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="location"
                                  constraintName="real_estate_object_param_location_fk" referencedTableName="location" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="type"
+                                 constraintName="real_estate_object_param_type_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="furnishings"
+                                 constraintName="real_estate_object_param_furnishings_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="balcony_terrace"
+                                 constraintName="real_estate_object_param_balcony_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="garage_parking"
+                                 constraintName="real_estate_object_param_parking_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="garden_yard"
+                                 constraintName="real_estate_object_param_garden_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="housing_condition"
+                                 constraintName="real_estate_object_param_condition_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="floor"
+                                 constraintName="real_estate_object_param_floor_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="heating"
+                                 constraintName="real_estate_object_param_heating_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="energy_certificate"
+                                 constraintName="real_estate_object_param_energy_certificate_word_fk" referencedTableName="word" referencedColumnNames="key"/>
+        <addForeignKeyConstraint baseTableName="real_estate_object_param" baseColumnNames="orientation"
+                                 constraintName="real_estate_object_param_orientation_word_fk" referencedTableName="word" referencedColumnNames="key"/>
         <addForeignKeyConstraint baseTableName="rental_claim" baseColumnNames="user"
                                  constraintName="rental_claim_user_fk" referencedTableName="user" referencedColumnNames="id"/>
 

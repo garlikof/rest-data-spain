@@ -5,7 +5,191 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="3" author="garlikoff">
-        <comment>Заполнение таблицы real_estate_object_param тестовыми данными.</comment>
+        <comment>Заполнение таблицы real_estate_object_param тестовыми данными и словарями.</comment>
+        <sql>
+            INSERT INTO word (key) VALUES
+                ('HOUSING_TYPE_APARTMENT'),
+                ('HOUSING_TYPE_HOUSE'),
+                ('HOUSING_TYPE_ROOM'),
+                ('FURNISHING_FULL'),
+                ('FURNISHING_PARTIAL'),
+                ('FURNISHING_NONE'),
+                ('BALCONY_BALCONY'),
+                ('BALCONY_TERRACE'),
+                ('BALCONY_NONE'),
+                ('PARKING_GARAGE'),
+                ('PARKING_PARKING'),
+                ('PARKING_NONE'),
+                ('GARDEN_GARDEN'),
+                ('GARDEN_YARD'),
+                ('GARDEN_NONE'),
+                ('CONDITION_NEW'),
+                ('CONDITION_RENOVATED'),
+                ('CONDITION_GOOD'),
+                ('CONDITION_NEEDS_RENOVATION'),
+                ('FLOOR_SOTANO'),
+                ('FLOOR_SEMISOTANO'),
+                ('FLOOR_PLANTA_BAJA'),
+                ('FLOOR_ENTREPLANTA'),
+                ('FLOOR_PRINCIPAL'),
+                ('FLOOR_PRIMERO'),
+                ('FLOOR_SEGUNDO'),
+                ('FLOOR_TERCERO'),
+                ('FLOOR_ATICO'),
+                ('FLOOR_SOBREATICO'),
+                ('FLOOR_BUHARDILLA'),
+                ('HEATING_GAS'),
+                ('HEATING_ELECTRIC'),
+                ('HEATING_NONE'),
+                ('ENERGY_CLASS_A'),
+                ('ENERGY_CLASS_B'),
+                ('ENERGY_CLASS_C'),
+                ('ENERGY_CLASS_D'),
+                ('ENERGY_CLASS_E'),
+                ('ENERGY_CLASS_F'),
+                ('ENERGY_CLASS_G'),
+                ('ORIENTATION_NORTH'),
+                ('ORIENTATION_SOUTH'),
+                ('ORIENTATION_WEST'),
+                ('ORIENTATION_EAST')
+            ON CONFLICT (key) DO NOTHING;
+        </sql>
+        <sql>
+            INSERT INTO translation (word_key, language_key, value) VALUES
+                ('HOUSING_TYPE_APARTMENT', 'es', 'Apartamento'),
+                ('HOUSING_TYPE_APARTMENT', 'en', 'Apartment'),
+                ('HOUSING_TYPE_APARTMENT', 'ru', 'Квартира'),
+                ('HOUSING_TYPE_HOUSE', 'es', 'Casa'),
+                ('HOUSING_TYPE_HOUSE', 'en', 'House'),
+                ('HOUSING_TYPE_HOUSE', 'ru', 'Дом'),
+                ('HOUSING_TYPE_ROOM', 'es', 'Habitación'),
+                ('HOUSING_TYPE_ROOM', 'en', 'Room'),
+                ('HOUSING_TYPE_ROOM', 'ru', 'Комната'),
+                ('FURNISHING_FULL', 'es', 'Amueblado'),
+                ('FURNISHING_FULL', 'en', 'Furnished'),
+                ('FURNISHING_FULL', 'ru', 'Меблировано'),
+                ('FURNISHING_PARTIAL', 'es', 'Parcialmente amueblado'),
+                ('FURNISHING_PARTIAL', 'en', 'Partially furnished'),
+                ('FURNISHING_PARTIAL', 'ru', 'Частично меблировано'),
+                ('FURNISHING_NONE', 'es', 'Sin amueblar'),
+                ('FURNISHING_NONE', 'en', 'Unfurnished'),
+                ('FURNISHING_NONE', 'ru', 'Без мебели'),
+                ('BALCONY_BALCONY', 'es', 'Balcón'),
+                ('BALCONY_BALCONY', 'en', 'Balcony'),
+                ('BALCONY_BALCONY', 'ru', 'Балкон'),
+                ('BALCONY_TERRACE', 'es', 'Terraza'),
+                ('BALCONY_TERRACE', 'en', 'Terrace'),
+                ('BALCONY_TERRACE', 'ru', 'Терраса'),
+                ('BALCONY_NONE', 'es', 'Sin balcón'),
+                ('BALCONY_NONE', 'en', 'No balcony'),
+                ('BALCONY_NONE', 'ru', 'Без балкона'),
+                ('PARKING_GARAGE', 'es', 'Garaje'),
+                ('PARKING_GARAGE', 'en', 'Garage'),
+                ('PARKING_GARAGE', 'ru', 'Гараж'),
+                ('PARKING_PARKING', 'es', 'Aparcamiento'),
+                ('PARKING_PARKING', 'en', 'Parking'),
+                ('PARKING_PARKING', 'ru', 'Парковка'),
+                ('PARKING_NONE', 'es', 'Sin aparcamiento'),
+                ('PARKING_NONE', 'en', 'No parking'),
+                ('PARKING_NONE', 'ru', 'Без парковки'),
+                ('GARDEN_GARDEN', 'es', 'Jardín'),
+                ('GARDEN_GARDEN', 'en', 'Garden'),
+                ('GARDEN_GARDEN', 'ru', 'Сад'),
+                ('GARDEN_YARD', 'es', 'Patio'),
+                ('GARDEN_YARD', 'en', 'Courtyard'),
+                ('GARDEN_YARD', 'ru', 'Двор'),
+                ('GARDEN_NONE', 'es', 'Sin jardín'),
+                ('GARDEN_NONE', 'en', 'No garden'),
+                ('GARDEN_NONE', 'ru', 'Без сада'),
+                ('CONDITION_NEW', 'es', 'Nuevo'),
+                ('CONDITION_NEW', 'en', 'New'),
+                ('CONDITION_NEW', 'ru', 'Новое'),
+                ('CONDITION_RENOVATED', 'es', 'Reformado'),
+                ('CONDITION_RENOVATED', 'en', 'Renovated'),
+                ('CONDITION_RENOVATED', 'ru', 'Отремонтированное'),
+                ('CONDITION_GOOD', 'es', 'En buen estado'),
+                ('CONDITION_GOOD', 'en', 'Good condition'),
+                ('CONDITION_GOOD', 'ru', 'Хорошее'),
+                ('CONDITION_NEEDS_RENOVATION', 'es', 'Necesita reforma'),
+                ('CONDITION_NEEDS_RENOVATION', 'en', 'Needs renovation'),
+                ('CONDITION_NEEDS_RENOVATION', 'ru', 'Требует ремонта'),
+                ('FLOOR_SOTANO', 'es', 'Sótano'),
+                ('FLOOR_SOTANO', 'en', 'Basement'),
+                ('FLOOR_SOTANO', 'ru', 'Подвал'),
+                ('FLOOR_SEMISOTANO', 'es', 'Semisótano'),
+                ('FLOOR_SEMISOTANO', 'en', 'Semi-basement'),
+                ('FLOOR_SEMISOTANO', 'ru', 'Полуподвал'),
+                ('FLOOR_PLANTA_BAJA', 'es', 'Planta baja'),
+                ('FLOOR_PLANTA_BAJA', 'en', 'Ground floor'),
+                ('FLOOR_PLANTA_BAJA', 'ru', 'Цокольный этаж'),
+                ('FLOOR_ENTREPLANTA', 'es', 'Entreplanta'),
+                ('FLOOR_ENTREPLANTA', 'en', 'Mezzanine'),
+                ('FLOOR_ENTREPLANTA', 'ru', 'Антресоль'),
+                ('FLOOR_PRINCIPAL', 'es', 'Principal'),
+                ('FLOOR_PRINCIPAL', 'en', 'Main floor'),
+                ('FLOOR_PRINCIPAL', 'ru', 'Главный этаж'),
+                ('FLOOR_PRIMERO', 'es', '1º'),
+                ('FLOOR_PRIMERO', 'en', 'First floor'),
+                ('FLOOR_PRIMERO', 'ru', 'Первый этаж'),
+                ('FLOOR_SEGUNDO', 'es', '2º'),
+                ('FLOOR_SEGUNDO', 'en', 'Second floor'),
+                ('FLOOR_SEGUNDO', 'ru', 'Второй этаж'),
+                ('FLOOR_TERCERO', 'es', '3º'),
+                ('FLOOR_TERCERO', 'en', 'Third floor'),
+                ('FLOOR_TERCERO', 'ru', 'Третий этаж'),
+                ('FLOOR_ATICO', 'es', 'Ático'),
+                ('FLOOR_ATICO', 'en', 'Penthouse'),
+                ('FLOOR_ATICO', 'ru', 'Пентхаус'),
+                ('FLOOR_SOBREATICO', 'es', 'Sobreático'),
+                ('FLOOR_SOBREATICO', 'en', 'Upper penthouse'),
+                ('FLOOR_SOBREATICO', 'ru', 'Верхний пентхаус'),
+                ('FLOOR_BUHARDILLA', 'es', 'Buhardilla'),
+                ('FLOOR_BUHARDILLA', 'en', 'Loft'),
+                ('FLOOR_BUHARDILLA', 'ru', 'Мансарда'),
+                ('HEATING_GAS', 'es', 'Calefacción de gas'),
+                ('HEATING_GAS', 'en', 'Gas heating'),
+                ('HEATING_GAS', 'ru', 'Газовое отопление'),
+                ('HEATING_ELECTRIC', 'es', 'Calefacción eléctrica'),
+                ('HEATING_ELECTRIC', 'en', 'Electric heating'),
+                ('HEATING_ELECTRIC', 'ru', 'Электрическое отопление'),
+                ('HEATING_NONE', 'es', 'Sin calefacción'),
+                ('HEATING_NONE', 'en', 'No heating'),
+                ('HEATING_NONE', 'ru', 'Без отопления'),
+                ('ENERGY_CLASS_A', 'es', 'Clase energética A'),
+                ('ENERGY_CLASS_A', 'en', 'Energy class A'),
+                ('ENERGY_CLASS_A', 'ru', 'Энергетический класс A'),
+                ('ENERGY_CLASS_B', 'es', 'Clase energética B'),
+                ('ENERGY_CLASS_B', 'en', 'Energy class B'),
+                ('ENERGY_CLASS_B', 'ru', 'Энергетический класс B'),
+                ('ENERGY_CLASS_C', 'es', 'Clase energética C'),
+                ('ENERGY_CLASS_C', 'en', 'Energy class C'),
+                ('ENERGY_CLASS_C', 'ru', 'Энергетический класс C'),
+                ('ENERGY_CLASS_D', 'es', 'Clase energética D'),
+                ('ENERGY_CLASS_D', 'en', 'Energy class D'),
+                ('ENERGY_CLASS_D', 'ru', 'Энергетический класс D'),
+                ('ENERGY_CLASS_E', 'es', 'Clase energética E'),
+                ('ENERGY_CLASS_E', 'en', 'Energy class E'),
+                ('ENERGY_CLASS_E', 'ru', 'Энергетический класс E'),
+                ('ENERGY_CLASS_F', 'es', 'Clase energética F'),
+                ('ENERGY_CLASS_F', 'en', 'Energy class F'),
+                ('ENERGY_CLASS_F', 'ru', 'Энергетический класс F'),
+                ('ENERGY_CLASS_G', 'es', 'Clase energética G'),
+                ('ENERGY_CLASS_G', 'en', 'Energy class G'),
+                ('ENERGY_CLASS_G', 'ru', 'Энергетический класс G'),
+                ('ORIENTATION_NORTH', 'es', 'Norte'),
+                ('ORIENTATION_NORTH', 'en', 'North'),
+                ('ORIENTATION_NORTH', 'ru', 'Север'),
+                ('ORIENTATION_SOUTH', 'es', 'Sur'),
+                ('ORIENTATION_SOUTH', 'en', 'South'),
+                ('ORIENTATION_SOUTH', 'ru', 'Юг'),
+                ('ORIENTATION_WEST', 'es', 'Oeste'),
+                ('ORIENTATION_WEST', 'en', 'West'),
+                ('ORIENTATION_WEST', 'ru', 'Запад'),
+                ('ORIENTATION_EAST', 'es', 'Este'),
+                ('ORIENTATION_EAST', 'en', 'East'),
+                ('ORIENTATION_EAST', 'ru', 'Восток')
+            ON CONFLICT (word_key, language_key) DO NOTHING;
+        </sql>
         <sql>
             INSERT INTO real_estate_object_param (
                 user_id,
@@ -39,55 +223,21 @@
                     WHEN 1 THEN 2
                     ELSE 3
                 END,
-                CASE (s.i % 3)
-                    WHEN 0 THEN 'Квартиры'
-                    WHEN 1 THEN 'Дома'
-                    ELSE 'Комнаты'
-                END,
-                CASE (s.i % 3)
-                    WHEN 0 THEN 'Меблировано'
-                    WHEN 1 THEN 'Частично меблировано'
-                    ELSE 'Без мебели'
-                END,
+                (ARRAY['HOUSING_TYPE_APARTMENT','HOUSING_TYPE_HOUSE','HOUSING_TYPE_ROOM'])[(s.i % 3) + 1],
+                (ARRAY['FURNISHING_FULL','FURNISHING_PARTIAL','FURNISHING_NONE'])[(s.i % 3) + 1],
                 (s.i % 2 = 0),
-                CASE (s.i % 3)
-                    WHEN 0 THEN 'Балкон'
-                    WHEN 1 THEN 'Терраса'
-                    ELSE 'Нет'
-                END,
-                CASE (s.i % 3)
-                    WHEN 0 THEN 'Гараж'
-                    WHEN 1 THEN 'Парковка'
-                    ELSE 'Нет'
-                END,
-                CASE (s.i % 3)
-                    WHEN 0 THEN 'Сад'
-                    WHEN 1 THEN 'Двор'
-                    ELSE 'Нет'
-                END,
+                (ARRAY['BALCONY_BALCONY','BALCONY_TERRACE','BALCONY_NONE'])[(s.i % 3) + 1],
+                (ARRAY['PARKING_GARAGE','PARKING_PARKING','PARKING_NONE'])[(s.i % 3) + 1],
+                (ARRAY['GARDEN_GARDEN','GARDEN_YARD','GARDEN_NONE'])[(s.i % 3) + 1],
                 (s.i % 5 = 0),
                 (s.i % 4 = 0),
-                CASE (s.i % 4)
-                    WHEN 0 THEN 'Новое'
-                    WHEN 1 THEN 'Отремонтированное'
-                    WHEN 2 THEN 'Хорошее'
-                    ELSE 'Требует ремонта'
-                END,
-                (ARRAY['Sótano','Semisótano','Planta baja','Entreplanta','Principal','1º','2º','3º','Ático','Sobreático','Buhardilla'])[(s.i % 11) + 1],
+                (ARRAY['CONDITION_NEW','CONDITION_RENOVATED','CONDITION_GOOD','CONDITION_NEEDS_RENOVATION'])[(s.i % 4) + 1],
+                (ARRAY['FLOOR_SOTANO','FLOOR_SEMISOTANO','FLOOR_PLANTA_BAJA','FLOOR_ENTREPLANTA','FLOOR_PRINCIPAL','FLOOR_PRIMERO','FLOOR_SEGUNDO','FLOOR_TERCERO','FLOOR_ATICO','FLOOR_SOBREATICO','FLOOR_BUHARDILLA'])[(s.i % 11) + 1],
                 (s.i % 2 = 0),
-                CASE (s.i % 3)
-                    WHEN 0 THEN 'Газовое'
-                    WHEN 1 THEN 'Электрическое'
-                    ELSE 'Нет'
-                END,
-                (ARRAY['A','B','C','D','E','F','G'])[(s.i % 7) + 1],
+                (ARRAY['HEATING_GAS','HEATING_ELECTRIC','HEATING_NONE'])[(s.i % 3) + 1],
+                (ARRAY['ENERGY_CLASS_A','ENERGY_CLASS_B','ENERGY_CLASS_C','ENERGY_CLASS_D','ENERGY_CLASS_E','ENERGY_CLASS_F','ENERGY_CLASS_G'])[(s.i % 7) + 1],
                 1950 + (s.i % 70),
-                CASE (s.i % 4)
-                    WHEN 0 THEN 'Север'
-                    WHEN 1 THEN 'Юг'
-                    WHEN 2 THEN 'Запад'
-                    ELSE 'Восток'
-                END
+                (ARRAY['ORIENTATION_NORTH','ORIENTATION_SOUTH','ORIENTATION_WEST','ORIENTATION_EAST'])[(s.i % 4) + 1]
             FROM generate_series(1, 1000) AS s(i);
         </sql>
     </changeSet>

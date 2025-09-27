@@ -49,13 +49,15 @@ public class RealEstateObjectParam {
     /**
      * Тип жилья (квартиры, дома, комнаты).
      */
-    @Column(name = "type")
-    private String type;
+    @ManyToOne
+    @JoinColumn(name = "type")
+    private Word type;
     /**
      * Сведения о меблировке.
      */
-    @Column(name = "furnishings")
-    private String furnishings;
+    @ManyToOne
+    @JoinColumn(name = "furnishings")
+    private Word furnishings;
     /**
      * Наличие лифта.
      */
@@ -64,18 +66,21 @@ public class RealEstateObjectParam {
     /**
      * Тип балкона/террасы (балкон, терраса или отсутствие).
      */
-    @Column(name = "balcony_terrace")
-    private String balconyTerrace;
+    @ManyToOne
+    @JoinColumn(name = "balcony_terrace")
+    private Word balconyTerrace;
     /**
      * Наличие и тип парковки (гараж, парковка или отсутствие).
      */
-    @Column(name = "garage_parking")
-    private String garageParking;
+    @ManyToOne
+    @JoinColumn(name = "garage_parking")
+    private Word garageParking;
     /**
      * Тип придомовой территории (сад, двор или отсутствие).
      */
-    @Column(name = "garden_yard")
-    private String gardenYard;
+    @ManyToOne
+    @JoinColumn(name = "garden_yard")
+    private Word gardenYard;
     /**
      * Наличие бассейна.
      */
@@ -89,13 +94,15 @@ public class RealEstateObjectParam {
     /**
      * Состояние жилья.
      */
-    @Column(name = "housing_condition")
-    private String housingCondition;
+    @ManyToOne
+    @JoinColumn(name = "housing_condition")
+    private Word housingCondition;
     /**
      * Номер этажа с учётом классификации (например, Planta baja, Ático).
      */
-    @Column(name = "floor")
-    private String floor;
+    @ManyToOne
+    @JoinColumn(name = "floor")
+    private Word floor;
     /**
      * Указывает на наличие кондиционера.
      */
@@ -104,13 +111,15 @@ public class RealEstateObjectParam {
     /**
      * Тип отопления (газовое, электрическое или отсутствие).
      */
-    @Column(name = "heating")
-    private String heating;
+    @ManyToOne
+    @JoinColumn(name = "heating")
+    private Word heating;
     /**
      * Энергетический сертификат.
      */
-    @Column(name = "energy_certificate")
-    private String energyCertificate;
+    @ManyToOne
+    @JoinColumn(name = "energy_certificate")
+    private Word energyCertificate;
     /**
      * Год постройки дома.
      */
@@ -119,6 +128,7 @@ public class RealEstateObjectParam {
     /**
      * Ориентация квартиры (север, юг, запад, восток).
      */
-    @Column(name = "orientation")
-    private String orientation;
+    @ManyToOne
+    @JoinColumn(name = "orientation")
+    private Word orientation;
 }
