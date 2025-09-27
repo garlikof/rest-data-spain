@@ -286,14 +286,11 @@
             numbered_params AS (
                 SELECT id AS param_id,
                        user_id,
+                       location,
                        type,
                        ROW_NUMBER() OVER (ORDER BY id) AS rn
                 FROM real_estate_object_param
                 WHERE user_id IN (SELECT id FROM "user" WHERE name LIKE 'Usuario %')
-            ),
-            location_pool AS (
-                SELECT array_agg(id ORDER BY id) AS ids
-                FROM location
             )
             INSERT INTO rental_proposal (
                 real_estate_object_id,
@@ -308,15 +305,14 @@
             SELECT
                 no.real_estate_object_id,
                 no.user_id,
-                location_pool.ids[((np.rn - 1) % array_length(location_pool.ids, 1)) + 1],
+                np.location,
                 ROUND(500 + ((np.rn * 37) % 2500), 2),
                 np.type,
                 (np.rn % 2 = 0),
                 CURRENT_DATE - (((np.rn - 1) % 30)::int),
                 (ARRAY['ACTIVE','PENDING','CLOSED'])[(np.rn % 3) + 1]
             FROM numbered_objects no
-            JOIN numbered_params np ON np.rn = no.rn
-            CROSS JOIN location_pool;
+            JOIN numbered_params np ON np.rn = no.rn;
         </sql>
     </changeSet>
 
