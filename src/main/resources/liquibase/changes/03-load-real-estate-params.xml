@@ -215,6 +215,10 @@
                 FROM real_estate_object
                 WHERE user_id IN (SELECT id FROM "user" WHERE name LIKE 'Usuario %')
             ),
+            location_pool AS (
+                SELECT array_agg(id ORDER BY id) AS ids
+                FROM location
+            ),
             series AS (
                 SELECT s.i,
                        no.user_id
@@ -245,7 +249,7 @@
             )
             SELECT
                 series.user_id,
-                NULL,
+                location_pool.ids[((series.i - 1) % array_length(location_pool.ids, 1)) + 1],
                 ROUND(45 + (series.i % 120) + ((series.i % 100) / 100.0), 2),
                 (series.i % 6) + 1,
                 CASE (series.i % 3)
@@ -268,7 +272,8 @@
                 (ARRAY['ENERGY_CLASS_A','ENERGY_CLASS_B','ENERGY_CLASS_C','ENERGY_CLASS_D','ENERGY_CLASS_E','ENERGY_CLASS_F','ENERGY_CLASS_G'])[(series.i % 7) + 1],
                 1950 + (series.i % 70),
                 (ARRAY['ORIENTATION_NORTH','ORIENTATION_SOUTH','ORIENTATION_WEST','ORIENTATION_EAST'])[(series.i % 4) + 1]
-            FROM series;
+            FROM series
+            CROSS JOIN location_pool;
         </sql>
         <sql>
             WITH numbered_objects AS (
@@ -285,6 +290,10 @@
                        ROW_NUMBER() OVER (ORDER BY id) AS rn
                 FROM real_estate_object_param
                 WHERE user_id IN (SELECT id FROM "user" WHERE name LIKE 'Usuario %')
+            ),
+            location_pool AS (
+                SELECT array_agg(id ORDER BY id) AS ids
+                FROM location
             )
             INSERT INTO rental_proposal (
                 real_estate_object_id,
@@ -299,14 +308,15 @@
             SELECT
                 no.real_estate_object_id,
                 no.user_id,
-                NULL,
+                location_pool.ids[((np.rn - 1) % array_length(location_pool.ids, 1)) + 1],
                 ROUND(500 + ((np.rn * 37) % 2500), 2),
                 np.type,
                 (np.rn % 2 = 0),
                 CURRENT_DATE - (((np.rn - 1) % 30)::int),
                 (ARRAY['ACTIVE','PENDING','CLOSED'])[(np.rn % 3) + 1]
             FROM numbered_objects no
-            JOIN numbered_params np ON np.rn = no.rn;
+            JOIN numbered_params np ON np.rn = no.rn
+            CROSS JOIN location_pool;
         </sql>
     </changeSet>
 
