@@ -303,7 +303,7 @@
                 ROUND(500 + ((np.rn * 37) % 2500), 2),
                 np.type,
                 (np.rn % 2 = 0),
-                CURRENT_DATE - ((np.rn - 1) % 30),
+                CURRENT_DATE - (((np.rn - 1) % 30)::int),
                 (ARRAY['ACTIVE','PENDING','CLOSED'])[(np.rn % 3) + 1]
             FROM numbered_objects no
             JOIN numbered_params np ON np.rn = no.rn;
