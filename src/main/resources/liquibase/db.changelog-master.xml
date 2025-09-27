@@ -6,5 +6,6 @@
 
     <include file="changes/01-create-tables.xml" relativeToChangelogFile="true"/>
     <include file="changes/02-load-locations.xml" relativeToChangelogFile="true"/>
+    <include file="changes/03-load-real-estate-params.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

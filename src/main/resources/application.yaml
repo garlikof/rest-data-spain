@@ -57,3 +57,18 @@ management:
 logging:
   level:
     org.springframework.security: DEBUG
+
+milvus:
+  host: localhost
+  port: 19530
+  database: default
+  collection: real_estate_objects
+  vector-field: embedding
+  dimension: 256
+  index-type: IVF_FLAT
+  index-params: '{"nlist":1024}'
+  search-params: '{"nprobe":16}'
+  metric-type: COSINE
+  shards-num: 2
+  description-max-length: 1024
+  language: es
