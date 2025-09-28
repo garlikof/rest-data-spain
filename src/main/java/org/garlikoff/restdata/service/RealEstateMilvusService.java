@@ -24,6 +24,7 @@ import org.garlikoff.restdata.repo.TranslationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -144,7 +146,7 @@ public class RealEstateMilvusService {
         List<List<Float>> vectors = List.of(toList(vector));
         SearchParam.Builder searchBuilder = SearchParam.newBuilder();
         searchBuilder = invokeBuilder(searchBuilder, properties.getCollection(),
-            "withCollectionName", "withCollection");
+            "withCollectionName", "withCollection", "withCollectionNames");
         searchBuilder = invokeBuilder(searchBuilder, resolveMetricType(),
             "withMetricType");
         searchBuilder = invokeBuilder(searchBuilder,
@@ -168,7 +170,7 @@ public class RealEstateMilvusService {
     private synchronized void ensureCollection() {
         HasCollectionParam.Builder hasBuilder = HasCollectionParam.newBuilder();
         hasBuilder = invokeBuilder(hasBuilder, properties.getCollection(),
-            "withCollectionName", "withCollection");
+            "withCollectionName", "withCollection", "withCollectionNames");
         HasCollectionParam hasCollectionParam = hasBuilder.build();
         R<Boolean> exists = client.hasCollection(hasCollectionParam);
         check(exists, "check collection existence");
@@ -181,7 +183,7 @@ public class RealEstateMilvusService {
     private synchronized void recreateCollection() {
         HasCollectionParam.Builder hasBuilder = HasCollectionParam.newBuilder();
         hasBuilder = invokeBuilder(hasBuilder, properties.getCollection(),
-            "withCollectionName", "withCollection");
+            "withCollectionName", "withCollection", "withCollectionNames");
         HasCollectionParam hasCollectionParam = hasBuilder.build();
         R<Boolean> exists = client.hasCollection(hasCollectionParam);
         check(exists, "check collection existence");
@@ -194,7 +196,7 @@ public class RealEstateMilvusService {
     private void dropCollection() {
         io.milvus.param.collection.DropCollectionParam.Builder dropBuilder = io.milvus.param.collection.DropCollectionParam.newBuilder();
         dropBuilder = invokeBuilder(dropBuilder, properties.getCollection(),
-            "withCollectionName", "withCollection");
+            "withCollectionName", "withCollection", "withCollectionNames");
         io.milvus.param.collection.DropCollectionParam dropCollectionParam = dropBuilder.build();
         R<?> dropResponse = client.dropCollection(dropCollectionParam);
         check(dropResponse, "drop collection");
@@ -234,7 +236,7 @@ public class RealEstateMilvusService {
             .build();
         CreateCollectionParam.Builder builder = CreateCollectionParam.newBuilder();
         builder = invokeBuilder(builder, properties.getCollection(),
-            "withCollectionName", "withCollection");
+            "withCollectionName", "withCollection", "withCollectionNames");
         builder.withDescription("Real estate objects embeddings")
             .withShardsNum(properties.getShardsNum())
             .addFieldType(primary)
@@ -248,7 +250,7 @@ public class RealEstateMilvusService {
         check(createResponse, "create collection");
         CreateIndexParam.Builder indexBuilder = CreateIndexParam.newBuilder();
         indexBuilder = invokeBuilder(indexBuilder, properties.getCollection(),
-            "withCollectionName", "withCollection");
+            "withCollectionName", "withCollection", "withCollectionNames");
         indexBuilder.withFieldName(properties.getVectorField())
             .withIndexName(properties.getVectorField() + "_idx")
             .withMetricType(resolveMetricType());
@@ -280,19 +282,19 @@ public class RealEstateMilvusService {
         );
         InsertParam.Builder insertBuilder = InsertParam.newBuilder();
         insertBuilder = invokeBuilder(insertBuilder, properties.getCollection(),
-            "withCollectionName", "withCollection");
+            "withCollectionName", "withCollection", "withCollectionNames");
         insertBuilder = invokeBuilder(insertBuilder, fields, "withFields");
         InsertParam insertParam = insertBuilder.build();
         R<io.milvus.grpc.MutationResult> insertResponse = client.insert(insertParam);
         check(insertResponse, "insert records");
         FlushParam.Builder flushBuilder = FlushParam.newBuilder();
         flushBuilder = invokeBuilder(flushBuilder, properties.getCollection(),
-            "withCollectionName", "withCollection");
+            "withCollectionName", "withCollection", "withCollectionNames");
         R<FlushResponse> flushResponse = client.flush(flushBuilder.build());
         check(flushResponse, "flush collection");
         LoadCollectionParam.Builder loadBuilder = LoadCollectionParam.newBuilder();
         loadBuilder = invokeBuilder(loadBuilder, properties.getCollection(),
-            "withCollectionName", "withCollection");
+            "withCollectionName", "withCollection", "withCollectionNames");
         R<?> loadResponse = client.loadCollection(loadBuilder.build());
         check(loadResponse, "load collection");
     }
@@ -558,6 +560,13 @@ public class RealEstateMilvusService {
         if (Number.class.isAssignableFrom(targetType) && Number.class.isAssignableFrom(valueType)) {
             return true;
         }
+        if (Collection.class.isAssignableFrom(targetType)) {
+            return value instanceof Collection<?> || value instanceof Iterable<?> || valueType.isArray() || value instanceof String;
+        }
+        if (targetType.isArray()) {
+            return valueType.isArray() || value instanceof Collection<?> || value instanceof Iterable<?> ||
+                (value instanceof String && targetType.getComponentType().isAssignableFrom(String.class));
+        }
         return targetType.isAssignableFrom(valueType);
     }
 
@@ -608,6 +617,59 @@ public class RealEstateMilvusService {
             }
             if (targetType == Double.class) {
                 return number.doubleValue();
+            }
+        }
+        if (Collection.class.isAssignableFrom(targetType)) {
+            if (value instanceof Collection<?> collection) {
+                return collection;
+            }
+            if (value instanceof Iterable<?> iterable) {
+                List<Object> list = new ArrayList<>();
+                for (Object element : iterable) {
+                    list.add(element);
+                }
+                return list;
+            }
+            if (value.getClass().isArray()) {
+                int length = Array.getLength(value);
+                List<Object> list = new ArrayList<>(length);
+                for (int i = 0; i < length; i++) {
+                    list.add(Array.get(value, i));
+                }
+                return list;
+            }
+            if (value instanceof String string) {
+                return List.of(string);
+            }
+        }
+        if (targetType.isArray()) {
+            Class<?> componentType = targetType.getComponentType();
+            if (value.getClass().isArray() && targetType.isInstance(value)) {
+                return value;
+            }
+            if (value instanceof Collection<?> collection) {
+                Object array = Array.newInstance(componentType, collection.size());
+                int index = 0;
+                for (Object element : collection) {
+                    Array.set(array, index++, coerceValue(componentType, element));
+                }
+                return array;
+            }
+            if (value instanceof Iterable<?> iterable) {
+                List<Object> list = new ArrayList<>();
+                for (Object element : iterable) {
+                    list.add(element);
+                }
+                Object array = Array.newInstance(componentType, list.size());
+                for (int i = 0; i < list.size(); i++) {
+                    Array.set(array, i, coerceValue(componentType, list.get(i)));
+                }
+                return array;
+            }
+            if (value instanceof String string && componentType.isAssignableFrom(String.class)) {
+                Object array = Array.newInstance(componentType, 1);
+                Array.set(array, 0, string);
+                return array;
             }
         }
         return value;
