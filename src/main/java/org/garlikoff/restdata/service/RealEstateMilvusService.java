@@ -251,9 +251,8 @@ public class RealEstateMilvusService {
             "withCollectionName", "withCollection");
         indexBuilder.withFieldName(properties.getVectorField())
             .withIndexName(properties.getVectorField() + "_idx")
-            .withMetricType(resolveMetricType())
-            .withExtraParam(properties.getIndexParams());
-        applyIndexType(indexBuilder);
+            .withMetricType(resolveMetricType());
+        configureIndexBuilder(indexBuilder);
         CreateIndexParam indexParam = indexBuilder.build();
         R<?> indexResponse = client.createIndex(indexParam);
         check(indexResponse, "create index");
@@ -614,13 +613,25 @@ public class RealEstateMilvusService {
         return value;
     }
 
-    private void applyIndexType(CreateIndexParam.Builder builder) {
+    boolean configureIndexBuilder(CreateIndexParam.Builder builder) {
         if (builder == null) {
-            return;
+            return false;
         }
-        if (!setIndexType(builder, properties.getIndexType())) {
-            setIndexType(builder, "IVF_FLAT");
+        boolean applied = applyIndexType(builder);
+        if (applied) {
+            builder.withExtraParam(properties.getIndexParams());
         }
+        return applied;
+    }
+
+    private boolean applyIndexType(CreateIndexParam.Builder builder) {
+        if (builder == null) {
+            return false;
+        }
+        if (setIndexType(builder, properties.getIndexType())) {
+            return true;
+        }
+        return setIndexType(builder, "IVF_FLAT");
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -628,19 +639,27 @@ public class RealEstateMilvusService {
         if (type == null || type.isBlank()) {
             return false;
         }
-        try {
-            Class<?> indexTypeClass = Class.forName("io.milvus.param.index.IndexType");
-            if (!Enum.class.isAssignableFrom(indexTypeClass)) {
-                return false;
+        String normalized = type.toUpperCase(Locale.ROOT);
+        String[] candidates = {"io.milvus.param.index.IndexType", "io.milvus.param.IndexType"};
+        for (String className : candidates) {
+            try {
+                Class<?> indexTypeClass = Class.forName(className);
+                if (!Enum.class.isAssignableFrom(indexTypeClass)) {
+                    continue;
+                }
+                Enum value = Enum.valueOf((Class<? extends Enum>) indexTypeClass.asSubclass(Enum.class), normalized);
+                Method method = builder.getClass().getMethod("withIndexType", indexTypeClass);
+                method.invoke(builder, value);
+                return true;
+            } catch (ClassNotFoundException ignored) {
+                // класс отсутствует в используемой версии SDK
+            } catch (IllegalArgumentException ignored) {
+                // значение не поддерживается данным перечислением
+            } catch (ReflectiveOperationException ignored) {
+                // метод не найден или недоступен
             }
-            Enum value = Enum.valueOf((Class<? extends Enum>) indexTypeClass.asSubclass(Enum.class), type.toUpperCase(Locale.ROOT));
-            builder.getClass().getMethod("withIndexType", indexTypeClass).invoke(builder, value);
-            return true;
-        } catch (IllegalArgumentException ignored) {
-            return false;
-        } catch (ReflectiveOperationException ignored) {
-            return false;
         }
+        return false;
     }
 
     private MetricType resolveMetricType() {
